@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ixtapa-Zihuatanejo Air Access Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: same departures-board system as the readiness summary; header, KPI strip, five chart panels, gateway board, implications */
+:root {
+  --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
+  --accent: #0d6a75; --accent-soft: #dcecee; --grey: #b9c6c9;
+  --crit: #b13e35; --warn: #b5741c; --part: #8f8318; --ok: #2f7d4f; --empty: #e4ecee;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+    --accent: #55bac6; --accent-soft: #17343a; --grey: #4a5f65;
+    --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #1c2e33;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+  --accent: #55bac6; --accent-soft: #17343a; --grey: #4a5f65;
+  --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #1c2e33;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; display: grid; gap: 36px; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; }
+h2 { font-size: 1.45rem; font-weight: 750; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.muted { color: var(--muted); }
+header { display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.lede { font-size: 1.15rem; max-width: 66ch; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 14px 18px; display: grid; gap: 6px; max-width: 80ch; font-size: 0.95rem; }
+.callout b { font-family: var(--display); font-stretch: 85%; font-size: 1.05rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px 14px; font-family: var(--mono); font-size: 0.75rem; }
+.tag { display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+.tag i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.kpi { border-top: 3px solid var(--ink); padding-top: 10px; display: grid; gap: 4px; align-content: start; }
+.kpi .v { font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: 2.1rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 0.9rem; color: var(--muted); }
+.kpi .s { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 14px; min-width: 0; }
+.panel-head { display: flex; justify-content: space-between; align-items: start; gap: 10px 16px; flex-wrap: wrap; }
+.panel-head > div { display: grid; gap: 4px; max-width: 70ch; }
+.panel .read { max-width: 75ch; }
+.src { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+.chart { width: 100%; overflow-x: auto; }
+.chart svg { display: block; width: 100%; min-width: 560px; height: auto; }
+.chart svg text { font-family: var(--body); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.85rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+
+.tbl { width: 100%; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 10px; text-align: left; border-top: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; border-top: 0; }
+td.num, th.num { text-align: right; }
+.heat td.cell { text-align: center; font-family: var(--mono); font-size: 0.82rem; border: 2px solid var(--surface); border-radius: 4px; }
+.heat th { text-align: center; }
+.heat th:first-child, .heat td:first-child { text-align: left; }
+.pill { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; border: 1.5px solid currentColor; white-space: nowrap; }
+
+.impl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.impl div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 6px; align-content: start; }
+.impl h3 { font-size: 1.12rem; }
+.sources { font-size: 0.86rem; color: var(--muted); display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 18px; }
+.sources a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.toggle { display: inline-flex; border: 1.5px solid var(--accent); border-radius: 8px; overflow: hidden; }
+.toggle button { font: inherit; font-size: 0.85rem; font-weight: 600; padding: 5px 12px; border: 0; background: none; color: var(--accent); cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+
+@media (max-width: 760px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .two, .impl { grid-template-columns: 1fr; }
+}
+
+/* Site fix-ups: standalone hosting base styles and back link */
+html, body { margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+.backbar { max-width: var(--bbw, 1080px); margin: 0 auto; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+.backbar a { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+.backbar a:hover { text-decoration: underline; }
+:root { --bbw: 1060px; }
+</style>
+
+<nav class="backbar" aria-label="Site"><a href="index.html">← All CAS work</a></nav>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const { useState } = React;
+const html = htm.bind(React.createElement);
+const fmt = n => n.toLocaleString("en-US");
+const pct = (a, b) => Math.round(1000 * (b / a - 1)) / 10;
+const sgn = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1) + "%";
+
+/* ---------- data ---------- */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+// International terminal passengers, both directions (OMA). Jan, May, Sep 2026 and Oct 2025 derived from year-to-date totals.
+const INTL25 = [36044,33671,34179,16413,7668,7229,7824,5422,3187,5802,17615,26566];
+const INTL26 = [36462,30873,28729,15567,7026,6051,7035,4206,2191];
+// Domestic terminal passengers Jan-Sep (OMA). Jan, May and Sep derived from year-to-date and quarterly totals.
+const DOM25 = [41426,35972,39079,46377,46600,41876,53749,51355,37061];
+const DOM26 = [51600,44076,50724,49037,50530,43524,54082,56905,34749];
+// Annual total passengers (Wikipedia; 2024-25 confirmed against OMA).
+const ANNUAL = [[2014,508065],[2015,562099],[2016,557389],[2017,597902],[2018,566497],[2019,625186],[2020,317395],[2021,434176],[2022,593354],[2023,654392],[2024,674660],[2025,733616]];
+const MIX = [
+  { p: "2024", dom: 453588, intl: 221072, tag: "Verified" },
+  { p: "2025", dom: 531996, intl: 201620, tag: "Verified" },
+  { p: "Jan–Sep 2025", dom: 393495, intl: 151637, tag: "Verified" },
+  { p: "Jan–Sep 2026", dom: 435227, intl: 138140, tag: "Verified" },
+];
+const DAYS = [31,28,31,30,31,30,31,31,30,31,30,31];
+const GATEWAYS = [
+  { g: "Los Angeles", wk: 6, nov: "~4", c: "Alaska", st: "yes", note: "Year-round", rank: "1" },
+  { g: "Houston", wk: 4, nov: "3", c: "United Express", st: "yes", note: "Winter days from late Oct", rank: "4" },
+  { g: "Calgary", wk: 4, nov: "3", c: "WestJet", st: "yes", note: "First flight 26 Oct", rank: "2" },
+  { g: "Vancouver", wk: 2, nov: "1", c: "WestJet, Air Canada", st: "yes", note: "First flight 29 Oct", rank: "5" },
+  { g: "Dallas-Fort Worth", wk: 6, nov: "4", c: "American Eagle", st: "tbc", note: "Starts November, date unconfirmed", rank: "3" },
+  { g: "Phoenix", wk: 2, nov: "1", c: "American, American Eagle", st: "tbc", note: "Starts November, date unconfirmed", rank: "—" },
+  { g: "San Francisco", wk: 1, nov: "1", c: "Alaska", st: "no", note: "Directory shows 21 Nov", rank: "—" },
+  { g: "Montreal", wk: 1, nov: "0", c: "Air Canada", st: "no", note: "Mid-December (18 Dec)", rank: "—" },
+  { g: "Chicago", wk: 1, nov: "0", c: "United", st: "no", note: "Late December (19 Dec)", rank: "—" },
+  { g: "Minneapolis", wk: 2, nov: "0", c: "Sun Country", st: "no", note: "Mid-December (20 Dec)", rank: "—" },
+  { g: "Toronto", wk: 0, nov: "0", c: "Air Canada (planned)", st: "dropped", note: "Removed from winter schedule", rank: "—" },
+];
+
+const TAGS = {
+  Verified: "var(--ok)", Derived: "var(--accent)", Directory: "var(--warn)", Hypothesis: "var(--crit)",
+};
+function Tag({ t }) { return html`<span class="tag" style=${{ color: TAGS[t] }}><i style=${{ background: TAGS[t] }}></i>${t}</span>`; }
+
+function Panel({ eyebrow, title, tags, src, children, read, extra }) {
+  return html`<section class="panel">
+    <div class="panel-head">
+      <div><div class="eyebrow">${eyebrow}</div><h2>${title}</h2></div>
+      <div class="tags">${tags.map(t => html`<${Tag} key=${t} t=${t} />`)}</div>
+    </div>
+    ${extra}
+    ${children}
+    ${read && html`<p class="read">${read}</p>`}
+    <p class="src">${src}</p>
+  </section>`;
+}
+
+/* ---------- chart 1: annual trend ---------- */
+function AnnualChart() {
+  const W = 760, H = 300, L = 56, R = 16, T = 24, B = 40, max = 800000;
+  const bw = (W - L - R) / ANNUAL.length;
+  const y = v => T + (H - T - B) * (1 - v / max);
+  const ref = 690902;
+  return html`<div class="chart"><svg viewBox=${`0 0 ${W} ${H}`} role="img" aria-label="Total passengers by year, 2014 to 2025">
+    ${[0, 200000, 400000, 600000, 800000].map(v => html`<g key=${v}>
+      <line x1=${L} x2=${W - R} y1=${y(v)} y2=${y(v)} stroke="var(--line)" />
+      <text x=${L - 8} y=${y(v) + 4} text-anchor="end" font-size="11" fill="var(--muted)">${v / 1000}k</text></g>`)}
+    <line x1=${L} x2=${W - R} y1=${y(ref)} y2=${y(ref)} stroke="var(--ink)" stroke-dasharray="4 4" opacity="0.6" />
+    <text x=${L + 6} y=${y(ref) - 6} font-size="11" fill="var(--muted)">2000 level: 690,902</text>
+    ${ANNUAL.map(([yr, v], i) => {
+      const hi = yr === 2025;
+      return html`<g key=${yr}>
+        <rect x=${L + i * bw + bw * 0.18} y=${y(v)} width=${bw * 0.64} height=${y(0) - y(v)} rx="2" fill=${hi ? "var(--accent)" : "var(--grey)"}><title>${yr}: ${fmt(v)} passengers</title></rect>
+        <text x=${L + i * bw + bw / 2} y=${H - B + 18} text-anchor="middle" font-size="11" fill="var(--muted)">${String(yr).slice(2) === "14" ? "2014" : "'" + String(yr).slice(2)}</text>
+        ${(yr === 2025 || yr === 2020 || yr === 2019) && html`<text x=${L + i * bw + bw / 2} y=${y(v) - 6} text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">${Math.round(v / 1000)}k</text>`}
+      </g>`;
+    })}
+  </svg></div>`;
+}
+
+/* ---------- chart 2: mix ---------- */
+function MixChart() {
+  const W = 760, rowH = 46, L = 118, R = 70, T = 8, H = T + MIX.length * rowH + 10;
+  const max = 600000, sx = v => (W - L - R) * v / max;
+  return html`<div class="chart"><svg viewBox=${`0 0 ${W} ${H}`} role="img" aria-label="Domestic and international passengers by period">
+    ${MIX.map((r, i) => {
+      const yy = T + i * rowH, tot = r.dom + r.intl, share = (100 * r.intl / tot).toFixed(1);
+      return html`<g key=${r.p}>
+        <text x=${L - 10} y=${yy + 21} text-anchor="end" font-size="12" fill="var(--ink)">${r.p}</text>
+        <rect x=${L} y=${yy + 6} width=${sx(r.dom)} height="22" fill="var(--grey)"><title>${r.p} domestic: ${fmt(r.dom)}</title></rect>
+        <rect x=${L + sx(r.dom)} y=${yy + 6} width=${sx(r.intl)} height="22" fill="var(--accent)"><title>${r.p} international: ${fmt(r.intl)}</title></rect>
+        <text x=${L + sx(tot) + 8} y=${yy + 21} font-size="12" font-weight="600" fill="var(--accent)">${share}% intl</text>
+      </g>`;
+    })}
+  </svg></div>`;
+}
+
+/* ---------- chart 3: monthly international ---------- */
+function MonthlyIntl() {
+  const W = 760, H = 320, L = 50, R = 12, T = 20, B = 58, max = 40000;
+  const band = (W - L - R) / 12, bw = band * 0.34;
+  const y = v => T + (H - T - B) * (1 - v / max);
+  const cx = i => L + i * band + band / 2;
+  return html`<div class="chart"><svg viewBox=${`0 0 ${W} ${H}`} role="img" aria-label="International passengers by month, 2025 and 2026">
+    ${[0, 10000, 20000, 30000, 40000].map(v => html`<g key=${v}>
+      <line x1=${L} x2=${W - R} y1=${y(v)} y2=${y(v)} stroke="var(--line)" />
+      <text x=${L - 6} y=${y(v) + 4} text-anchor="end" font-size="11" fill="var(--muted)">${v / 1000}k</text></g>`)}
+    <rect x=${cx(4) - band / 2} y=${T} width=${band * 6} height=${H - T - B} fill="var(--empty)" opacity="0.7" />
+    <text x=${cx(6.5)} y=${T + 14} text-anchor="middle" font-size="11" fill="var(--muted)">May–Oct: rainy and hurricane season</text>
+    ${MONTHS.map((m, i) => {
+      const a = INTL25[i], b = INTL26[i];
+      return html`<g key=${m}>
+        <rect x=${cx(i) - bw - 1} y=${y(a)} width=${bw} height=${y(0) - y(a)} fill="var(--grey)"><title>${m} 2025: ${fmt(a)}</title></rect>
+        ${b !== undefined && html`<rect x=${cx(i) + 1} y=${y(b)} width=${bw} height=${y(0) - y(b)} fill="var(--accent)"><title>${m} 2026: ${fmt(b)} (${sgn(pct(a, b))})</title></rect>`}
+        <text x=${cx(i)} y=${H - B + 16} text-anchor="middle" font-size="11" fill="var(--ink)">${m}</text>
+        ${b !== undefined && html`<text x=${cx(i)} y=${H - B + 33} text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" fill=${pct(a, b) < -15 ? "var(--crit)" : "var(--muted)"}>${sgn(pct(a, b)).replace(".0%", "%")}</text>`}
+      </g>`;
+    })}
+    <line x1=${cx(10) - bw / 2 - 1} x2=${cx(10) - bw / 2 - 1} y1=${y(17615) - 22} y2=${y(17615) - 4} stroke="var(--ink)" />
+    <text x=${cx(10) - bw / 2 - 1} y=${y(17615) - 27} text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">CAS month</text>
+  </svg></div>`;
+}
+
+/* ---------- chart 4: YoY divergence ---------- */
+function Divergence() {
+  const W = 760, H = 290, L = 50, R = 12, T = 16, B = 34, lim = 35;
+  const band = (W - L - R) / 9, bw = band * 0.32;
+  const y = v => T + (H - T - B) * (lim - v) / (2 * lim);
+  const cx = i => L + i * band + band / 2;
+  const rows = MONTHS.slice(0, 9).map((m, i) => ({ m, d: pct(DOM25[i], DOM26[i]), n: pct(INTL25[i], INTL26[i]) }));
+  const bar = (v, x, fill, label) => html`<rect x=${x} y=${v >= 0 ? y(v) : y(0)} width=${bw} height=${Math.abs(y(v) - y(0))} fill=${fill}><title>${label}: ${sgn(v)}</title></rect>`;
+  return html`<div class="chart"><svg viewBox=${`0 0 ${W} ${H}`} role="img" aria-label="Year-over-year change by month, domestic and international, 2026">
+    ${[-30, -15, 0, 15, 30].map(v => html`<g key=${v}>
+      <line x1=${L} x2=${W - R} y1=${y(v)} y2=${y(v)} stroke=${v === 0 ? "var(--ink)" : "var(--line)"} />
+      <text x=${L - 6} y=${y(v) + 4} text-anchor="end" font-size="11" fill="var(--muted)">${v > 0 ? "+" : ""}${v}%</text></g>`)}
+    ${rows.map((r, i) => html`<g key=${r.m}>
+      ${bar(r.d, cx(i) - bw - 1, "var(--grey)", r.m + " domestic")}
+      ${bar(r.n, cx(i) + 1, "var(--accent)", r.m + " international")}
+      <text x=${cx(i)} y=${H - 12} text-anchor="middle" font-size="11" fill="var(--ink)">${r.m}</text>
+    </g>`)}
+  </svg></div>`;
+}
+
+/* ---------- group-lift heat table ---------- */
+function LiftTable() {
+  const arr = INTL25.map((p, i) => p / 2 / DAYS[i]);
+  const sizes = [100, 300, 500, 800];
+  const tone = d => d <= 0.5 ? ["var(--ok)", 0.22] : d <= 1 ? ["var(--part)", 0.25] : d <= 3 ? ["var(--warn)", 0.28] : ["var(--crit)", 0.3];
+  return html`<div class="tbl"><table class="heat">
+    <thead><tr><th>Delegates</th>${MONTHS.map(m => html`<th key=${m}>${m}</th>`)}</tr>
+      <tr><th class="muted" style=${{ textTransform: "none", letterSpacing: 0 }}>Intl arrivals/day</th>${arr.map((a, i) => html`<th key=${i} style=${{ textTransform: "none" }}>${Math.round(a)}</th>`)}</tr></thead>
+    <tbody>${sizes.map(s => html`<tr key=${s}><td><b>${s}</b></td>${arr.map((a, i) => {
+      const d = s / a, [c, o] = tone(d);
+      return html`<td key=${i} class="cell" style=${{ background: `color-mix(in srgb, ${c} ${Math.round(o * 100)}%, transparent)` }} title=${`${s} delegates = ${d.toFixed(1)} days of average ${MONTHS[i]} international arrivals`}>${d.toFixed(1)}</td>`;
+    })}</tr>`)}</tbody>
+  </table></div>`;
+}
+
+const ST = { yes: ["Yes", "var(--ok)"], tbc: ["Unconfirmed", "var(--warn)"], no: ["Not yet", "var(--muted)"], dropped: ["Dropped", "var(--crit)"] };
+function GatewayTable() {
+  const [sort, setSort] = useState("wk");
+  const rows = [...GATEWAYS].sort((a, b) => sort === "wk" ? b.wk - a.wk : a.g.localeCompare(b.g));
+  return html`<div class="tbl"><table>
+    <thead><tr><th>Gateway</th><th class="num">Weekly inbound flights (winter peak)</th><th class="num">In November</th><th>Carrier shown</th><th>Flying Nov 1</th><th class="num">2025 intl rank</th></tr></thead>
+    <tbody>${rows.map(r => html`<tr key=${r.g}>
+      <td><b>${r.g}</b></td>
+      <td class="num">${r.wk || "—"}</td>
+      <td class="num">${r.nov}</td>
+      <td>${r.c}</td>
+      <td><span class="pill" style=${{ color: ST[r.st][1] }}>${ST[r.st][0]}</span><div class="muted" style=${{ fontSize: "0.8rem", marginTop: "3px" }}>${r.note}</div></td>
+      <td class="num">${r.rank}</td></tr>`)}</tbody>
+  </table>
+  <div style=${{ marginTop: "10px" }} class="toggle" role="group" aria-label="Sort gateways">
+    <button type="button" aria-pressed=${sort === "wk"} onClick=${() => setSort("wk")}>By frequency</button>
+    <button type="button" aria-pressed=${sort === "az"} onClick=${() => setSort("az")}>A–Z</button>
+  </div></div>`;
+}
+
+function App() {
+  const i9a = INTL25.slice(0, 9).reduce((s, v) => s + v, 0), i9b = INTL26.reduce((s, v) => s + v, 0);
+  const d9a = DOM25.reduce((s, v) => s + v, 0), d9b = DOM26.reduce((s, v) => s + v, 0);
+  const peak = [0, 1, 2, 3, 10, 11].reduce((s, i) => s + INTL25[i], 0), tot = INTL25.reduce((s, v) => s + v, 0);
+  return html`<main class="wrap">
+    <header>
+      <div class="eyebrow">Pre-CAS review · Block 1 · Participant access</div>
+      <h1>Ixtapa-Zihuatanejo Air Access Analysis</h1>
+      <div class="meta"><span>Zihuatanejo International Airport (ZIH)</span><span>Data to September 2026</span><span>Prepared 30 Oct 2026 for BMAC, PCMA advisor</span></div>
+      <p class="lede">Total traffic is at a record, but the growth is all domestic. International air is a winter, narrow-body product that is shrinking at both ends of the season, which makes it the binding constraint for international business events.</p>
+    </header>
+
+    <aside class="callout" aria-label="Data notes">
+      <b>How to read the tags</b>
+      <div class="tags"><${Tag} t="Verified" /> <span class="muted">OMA operator filings</span> <${Tag} t="Derived" /> <span class="muted">my arithmetic from those filings</span> <${Tag} t="Directory" /> <span class="muted">route directories or Wikipedia, unconfirmed</span> <${Tag} t="Hypothesis" /> <span class="muted">directional estimate</span></div>
+      <p>Passenger counts are terminal passengers in both directions. OMA classes traffic by route, not nationality, so a foreign delegate connecting through Mexico City counts as domestic. We have requested seat schedules by gateway and month from the destination.</p>
+    </aside>
+
+    <section class="kpis" aria-label="Key figures">
+      <div class="kpi"><span class="v">${fmt(733616)}</span><span class="l">passengers in 2025, +8.7% and a record</span><span class="s" style=${{ color: TAGS.Verified }}>Verified</span></div>
+      <div class="kpi"><span class="v">${sgn(pct(i9a, i9b))}</span><span class="l">international, Jan–Sep 2026, while domestic rose ${sgn(pct(d9a, d9b))}</span><span class="s" style=${{ color: TAGS.Verified }}>Verified</span></div>
+      <div class="kpi"><span class="v">${Math.round(100 * peak / tot)}%</span><span class="l">of 2025 international passengers flew November to April</span><span class="s" style=${{ color: TAGS.Derived }}>Derived</span></div>
+      <div class="kpi"><span class="v">~29</span><span class="l">weekly U.S. and Canada flights at winter peak, across ten gateways</span><span class="s" style=${{ color: TAGS.Directory }}>Directory</span></div>
+    </section>
+
+    <${Panel} eyebrow="Long-run trend" title="Traffic has recovered past 2019 and finally passed its 2000 level" tags=${["Verified", "Directory"]}
+      read="ZIH carried 733,616 passengers in 2025, 17% above 2019 and only about 6% above 2000. A quarter-century of flat traffic followed by a domestic-led recovery is the context for any international ambition."
+      src="Annual totals: Wikipedia airport page (2014–2023); 2024–2025 confirmed against OMA's December 2025 report.">
+      <${AnnualChart} />
+    <//>
+
+    <${Panel} eyebrow="Traffic mix" title="International's share is falling every period" tags=${["Verified", "Derived"]}
+      extra=${html`<div class="legend"><span><i style=${{ background: "var(--grey)" }}></i>Domestic</span><span><i style=${{ background: "var(--accent)" }}></i>International</span></div>`}
+      read="Domestic passengers grew 17.3% in 2025 and another 10.6% in January to September 2026. International fell 8.8% and then 8.9%. Airlines are adding capacity on Mexican routes, not on cross-border ones."
+      src="OMA December 2025 report and Q3 2026 filing; shares are my arithmetic.">
+      <${MixChart} />
+    <//>
+
+    <${Panel} eyebrow="Seasonality and trend" title="International passengers are down in eight of nine months of 2026" tags=${["Verified", "Derived"]}
+      extra=${html`<div class="legend"><span><i style=${{ background: "var(--grey)" }}></i>2025</span><span><i style=${{ background: "var(--accent)" }}></i>2026, Jan–Sep</span><span>Figure under each month: 2026 vs 2025</span></div>`}
+      read="The peak is no longer growing (January to April −7.2%) and the trough is collapsing (September −31%). November, the CAS month, carried about 294 international arrivals a day in 2025, half the January to February level, because several winter gateways have not started flying."
+      src="OMA monthly traffic reports and Q3 2026 filing. January, May and September 2026 and October 2025 derived from year-to-date or quarterly totals.">
+      <${MonthlyIntl} />
+    <//>
+
+    <${Panel} eyebrow="Divergence" title="Domestic grew in eight of nine months; international fell in eight" tags=${["Verified", "Derived"]}
+      extra=${html`<div class="legend"><span><i style=${{ background: "var(--grey)" }}></i>Domestic, 2026 vs 2025</span><span><i style=${{ background: "var(--accent)" }}></i>International, 2026 vs 2025</span></div>`}
+      read="Domestic gains were strongest in the winter peak (+22% to +30% in January to March), the same months international weakened. September 2026 was the first month in which both fell."
+      src="OMA monthly reports; year-over-year changes are my arithmetic.">
+      <${Divergence} />
+    <//>
+
+    <div class="two">
+      <${Panel} eyebrow="Group lift" title="How many days of arrivals a group consumes" tags=${["Derived", "Hypothesis"]}
+        read="Each cell is delegates divided by the airport's average daily international arrivals in 2025. Above one day, a group needs staggered arrivals or a charter; above three, it is not realistic on scheduled service."
+        src="Arrivals taken as half of OMA international passengers. Assumes every delegate flies internationally into ZIH; it sizes the problem and does not replace a seat schedule.">
+        <${LiftTable} />
+      <//>
+      <${Panel} eyebrow="Capacity" title="Narrow-body, single-carrier gateways" tags=${["Directory", "Hypothesis"]}
+        read="One terminal, six gates and six narrow-body stands. No Latin American or European nonstop. Rough seat arithmetic puts January flights 80–100% full and November 50–60% full, so spare seats sit in the shoulder weeks, not the peak."
+        src="Wikipedia airport page (secondary, March 2026 snapshot); load estimate assumes 140–180 seats a flight and pairs the 2026–27 schedule with 2025–26 traffic.">
+        <div class="kpis" style=${{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
+          <div class="kpi"><span class="v">6</span><span class="l">narrow-body stands, one terminal</span></div>
+          <div class="kpi"><span class="v">0</span><span class="l">Latin American or European nonstops</span></div>
+          <div class="kpi"><span class="v">80–100%</span><span class="l">implied January load (hypothesis)</span></div>
+          <div class="kpi"><span class="v">50–60%</span><span class="l">implied November load (hypothesis)</span></div>
+        </div>
+      <//>
+    </div>
+
+    <${Panel} eyebrow="Gateways, winter 2026–27" title="Ten gateways; only two near-daily, each on a single airline" tags=${["Directory"]}
+      src="Status as of 1 Nov 2026. Winter-peak frequencies: aviability route directory. November frequencies and start months: Zihuatravels 2026–27 flight guide (October 2026; it notes schedules are still being finalized). First flights: Traviatic and Ixtapa y Zihuatanejo, 26–29 Oct 2026. Carriers and rank: Wikipedia. Toronto: BlogTO and Travelweek, October 2026. None confirmed with airlines.">
+      <${GatewayTable} />
+    <//>
+
+    <section aria-label="Implications" style=${{ display: "grid", gap: "14px" }}>
+      <div><div class="eyebrow">What it means</div><h2>Five implications for business events</h2></div>
+      <div class="impl">
+        <div><h3>The window is December to March</h3><p>That is when international lift exists, flights are full and rooms are at peak demand. Treat today's lift as the ceiling, not the floor.</p></div>
+        <div><h3>Shoulder weeks may be the opening</h3><p>November and April have spare seats and quieter hotels. This is a hypothesis that a seat schedule would confirm or kill.</p></div>
+        <div><h3>No bid can rely on a route</h3><p>Single-carrier gateways and a dropped Toronto flight mean lift for a contracted event has to be underwritten by a charter or a block.</p></div>
+        <div><h3>Domestic air is the strength</h3><p>About 920 domestic arrivals a day against about 68 international in August 2026. Mexican-origin events are the best-supported case.</p></div>
+        <div style=${{ gridColumn: "1 / -1" }}><h3>"International" splits in two</h3><p>North American delegates can reach the winter gateways, subject to safety approval. Delegates from Europe, Latin America and Asia face a two-leg trip on narrow-body capacity, so a global association is out for now.</p></div>
+      </div>
+    </section>
+
+    <footer class="sources">
+      <span>Sources: OMA traffic reports (<a href="https://news.oma.aero/assets/oma-december-2025-traffic-report-vf-pdf-293d7-f8d04.html?dl=1" target="_blank" rel="noopener">Dec 2025</a>, <a href="https://news.oma.aero/assets/oma-april-2026-traffic-report-vf-1-pdf-4fd0a-f8d04.html?dl=1" target="_blank" rel="noopener">Apr 2026</a>, <a href="https://news.oma.aero/assets/oma-june-2026-traffic-report-vf-pdf-0e520-f8d04.html?dl=1" target="_blank" rel="noopener">Jun 2026</a>, <a href="https://news.oma.aero/assets/oma-july-2026-traffic-report-vf-pdf-9ddb1-f8d04.html?dl=1" target="_blank" rel="noopener">Jul 2026</a>, <a href="https://noticias.oma.aero/assets/oma-reporte-trafico-ago26-vf-pdf-51d07-5f19f.html?dl=1" target="_blank" rel="noopener">Aug 2026</a>), <a href="https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1598603_1.pdf" target="_blank" rel="noopener">OMA Q3 2026 filing</a>, <a href="https://en.wikipedia.org/wiki/Ixtapa-Zihuatanejo_International_Airport" target="_blank" rel="noopener">Wikipedia airport page</a>, <a href="https://aviability.com/en/airport/zih-ixtapa-zihuatanejo/destinations" target="_blank" rel="noopener">aviability route directory</a>, <a href="https://www.blogto.com/travel/2026/10/air-canada-axes-flight-toronto-mexican-vacation/" target="_blank" rel="noopener">BlogTO on Air Canada</a>.</span>
+      <span>Companion pages: <a href="05-Discovery-Preparation-Summary.html">readiness summary</a> and <a href="02-Segment-Fit-Working-View.html">segment fit working view</a>.</span>
+    </footer>
+  </main>`;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(html`<${App} />`);
+</script>

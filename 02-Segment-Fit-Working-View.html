@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ixtapa-Zihuatanejo Segment Fit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
+  --accent: #0d6a75; --accent-soft: #dcecee;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+    --accent: #55bac6; --accent-soft: #17343a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+  --accent: #55bac6; --accent-soft: #17343a; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; display: grid; gap: 32px; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+header { display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.lede { font-size: clamp(1.1rem, 2.2vw, 1.3rem); line-height: 1.45; max-width: 66ch; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 14px 18px; display: grid; gap: 6px; max-width: 80ch; font-size: 0.95rem; }
+.callout b { font-family: var(--display); font-stretch: 85%; font-size: 1.05rem; }
+.doc { counter-reset: sec; display: grid; gap: 22px; }
+.doc section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: grid; gap: 14px; min-width: 0; }
+.doc section h2 { font-size: 1.5rem; font-weight: 750; display: grid; gap: 6px; }
+.doc section h2::before { counter-increment: sec; content: counter(sec, decimal-leading-zero); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; }
+.doc section.sources { background: none; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 18px 0 0; font-size: 0.88rem; color: var(--muted); }
+.doc section.sources h2 { font-size: 1.1rem; }
+.doc section.sources h2::before { content: none; }
+.doc p, .doc li { max-width: 78ch; }
+.doc ul, .doc ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 8px; }
+.doc li::marker { color: var(--accent); }
+.doc ol li::marker { font-family: var(--mono); }
+.doc strong { font-weight: 600; }
+.doc em { color: var(--muted); font-style: normal; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.tbl { width: 100%; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 10px; text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; border-top: 0; }
+td:first-child { font-weight: 600; }
+
+/* Site fix-ups: standalone hosting base styles and back link */
+html, body { margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+.backbar { max-width: var(--bbw, 1080px); margin: 0 auto; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+.backbar a { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+.backbar a:hover { text-decoration: underline; }
+:root { --bbw: 1060px; }
+</style>
+<body>
+<nav class="backbar" aria-label="Site"><a href="index.html">← All CAS work</a></nav>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Working paper · Summit objective 2 · Wed scenario workshop</div>
+    <h1>Realistic Segment Fit: A Working View</h1>
+    <div class="meta"><span>PCMA Customer Advisory Summit, 17–20 Nov 2026</span><span>27 Oct 2026, revised 29 Oct</span><span>B Mac, PCMA advisor</span></div>
+    <p class="lede">Mexican corporate and incentive groups of 100–300, midweek, in shoulder months are the core. 300–800 is conditional. 1,000 is out.</p>
+  </header>
+  <aside class="callout" aria-label="Evidence and limits"><b>Evidence and limits</b><p>A desk view built from public sources before the destination has shared any data. Venue figures are self-reported, flight frequencies come from route directories, and every scenario stays a hypothesis until its evidence is named.</p></aside>
+  <div class="doc">
+<section>
+<h2>The working view</h2>
+<p>Ixtapa-Zihuatanejo can realistically win Mexican corporate and incentive groups of 100–300 delegates, midweek, in shoulder months. A conditional band runs from 300 to 800, and 1,000 is out. Canadian and U.S. business is conditional.</p>
+<p>This is a hypothesis built from public evidence and professional judgment. The destination has shared no data, so every row below carries an evidence status.</p>
+<ul>
+<li><strong>Brand:</strong> known as a leisure resort, not a business events destination. The program itself says so.</li>
+<li><strong>Air:</strong> thin, domestic-led and seasonal. About 1,000 arrivals a day on average. International traffic fell 8.8% in 2025 and 8.9% more in Jan–Sep 2026.</li>
+<li><strong>Space:</strong> one large hall at Azul (1,790.75 m² official); elsewhere small rooms. Stated maxima imply tight density, so treat listed capacities as maximums.</li>
+<li><strong>Rooms:</strong> leisure-first, with weddings holding weekends. The luxury tier is about 110 rooms, with little enclosed working space.</li>
+<li><strong>Safety:</strong> U.S. text bars government employees from the destination. Canada and the UK except it by air. Resident perception is mixed: 60.5% call the city unsafe (INEGI, Sept 2026).</li>
+</ul>
+</section>
+<section>
+<h2>Segment fit map</h2>
+<p>This mirrors Wednesday's scenario workshop: type, size, season, origin, and the conditions to make each viable. Every row names its evidence, or it stays a hypothesis.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Scenario and size</th>
+<th>Season and origin</th>
+<th>Fit now</th>
+<th>Evidence status</th>
+<th>Conditions to make it viable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mexican corporate and incentive, 100–300, midweek</td>
+<td>Shoulder months; Mexico City, Guadalajara, Monterrey and others</td>
+<td>Core</td>
+<td>Hypothesis. Domestic traffic grew 17.3% in 2025; no group data</td>
+<td>Working-capacity check at 3–5 hotels; weekday group rates; staggered air; storm backup</td>
+</tr>
+<tr>
+<td>Boutique executive retreat or board, VIP buyout, 20–110 rooms</td>
+<td>November to April, midweek; Mexico, Canada, U.S.</td>
+<td>Niche</td>
+<td>Hypothesis. About 110 luxury rooms in two boutiques (listings); Thompson's enclosed working space is a 12-person boardroom</td>
+<td>Indoor private working space, buyout terms, privacy, transfer logistics, an incentive-grade definition</td>
+</tr>
+<tr>
+<td>National tourism-sector congress (AFEET and guides' congress type)</td>
+<td>Any month; Mexico</td>
+<td>Already winning</td>
+<td>Reported wins; delegate counts unknown</td>
+<td>Ask the actual headcounts; they set the real ceiling</td>
+</tr>
+<tr>
+<td>Canadian incentive and corporate, 50–200</td>
+<td>November to April; Vancouver, Calgary, Montreal</td>
+<td>Conditional</td>
+<td>Canada excepts Ixtapa/Zihuatanejo by air. Directory lists Calgary 4 weekly, Vancouver 2, Montréal 1; Toronto cut</td>
+<td>Weekly seats against group size; charters or blocks; seasonal fit</td>
+</tr>
+<tr>
+<td>U.S. non-federal incentive and corporate, 50–200</td>
+<td>November to April; Los Angeles, Houston, others</td>
+<td>Conditional</td>
+<td>U.S. text bars government employees; citizens told to follow the same limits. Directory lists Los Angeles 6 weekly, Dallas 6, Houston 4, Phoenix 2</td>
+<td>A documented safety case; sign-off by the client's travel-risk team</td>
+</tr>
+<tr>
+<td>Multi-hotel midweek event, 300–800</td>
+<td>Slow period; Mexico</td>
+<td>Conditional band</td>
+<td>Sizing math: 4–24% of destination rooms; 800 needs 89–111% of Azul's two hotels</td>
+<td>Multi-hotel blocks, halls confirmed at working capacity, staggered or chartered air, displacement terms with hotels and weddings</td>
+</tr>
+<tr>
+<td>Industry-supported medical congress</td>
+<td>Any</td>
+<td>Screen first</td>
+<td>Ethical MedTech vetting excludes resort and beach venues for covered events; scope is event-specific</td>
+<td>An event-specific determination before any marketing or deposits</td>
+</tr>
+<tr>
+<td>1,000+ delegates, international association congress, federally linked groups</td>
+<td>Any</td>
+<td>Out</td>
+<td>Sizing math; U.S. text; no public convention center found</td>
+<td>Not realistic now</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section>
+<h2>Sizing check</h2>
+<p>A 1,000-person event needs more rooms than Azul's two hotels combined, and an 800-person event nearly matches them. This is derived; verify against real inventories.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Delegates</th>
+<th>Rooms a night</th>
+<th>Share of destination rooms</th>
+<th>Share of Azul's two hotels</th>
+<th>Share of one average day's arrivals, if all land together</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>80–100</td>
+<td>1–3%</td>
+<td>11–14%</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>300</td>
+<td>240–300</td>
+<td>4–9%</td>
+<td>33–41%</td>
+<td>30%</td>
+</tr>
+<tr>
+<td>500</td>
+<td>400–500</td>
+<td>6–15%</td>
+<td>55–69%</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>800</td>
+<td>640–800</td>
+<td>10–24%</td>
+<td>89–111%</td>
+<td>80%</td>
+</tr>
+<tr>
+<td>1,000</td>
+<td>800–1,000</td>
+<td>12–30%</td>
+<td>111–138%</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table></div>
+<p>Assumptions: 0.8–1.0 rooms per delegate (a general planning norm); 3,300–6,500 destination rooms (sources disagree); about 723 rooms in Azul's two hotels (listing figures); about 1,000 arrivals a day (733,616 passengers in 2025 ÷ 365 ÷ 2). These are annual averages, so a peak winter week is tighter.</p>
+</section>
+<section>
+<h2>Constraints in one line each</h2>
+<ul>
+<li><strong>Brand:</strong> the program calls Ixtapa "a leisure destination converting its offer." PCMA Latam's lead said it is known in the Mexican meetings market but not internationally. Cancún's center alone hosted 19 congresses in 2025. <em>Reported.</em></li>
+<li><strong>Air:</strong> 733,616 passengers in 2025 (+8.7%). Domestic grew 17.3% and international fell 8.8% in 2025; international fell a further 8.9% in Jan–Sep 2026. The directory lists about 29 weekly U.S. and Canada flights this winter. <em>Verified (operator filings, arithmetic); frequencies reported.</em></li>
+<li><strong>Space:</strong> Azul's official hall is 1,790.75 m² and Las Brisas's is 936 m². Their stated maxima imply about 1.2–1.4 m² per classroom or banquet seat. Other hotels' rooms are small. <em>Self-reported; unverified on site.</em></li>
+<li><strong>Rooms:</strong> 2025 annual occupancy is state-reported at 65.5% (geography unverified; a FONATUR page says 61.7%). Weekend peak readings were 81–95%; weekday data is unpublished. <em>Reported.</em></li>
+<li><strong>Weddings:</strong> a headline product sold from shared facilities at Azul. Booking guidance is 9–12 months ahead (6–12 per Barceló Ixtapa). Local volumes unknown. <em>Self-reported; hypothesis on the squeeze.</em></li>
+<li><strong>Safety:</strong> national U.S. advisory Level 2 (29 May 2026); the text bars U.S. government employees from Guerrero, including Ixtapa and Zihuatanejo. INEGI's Sept 2026 survey has 60.5% of residents calling the city unsafe, against 58.1% nationally. <em>Reported, from search excerpts of the official text; the survey measures resident perception.</em></li>
+<li><strong>Season:</strong> November to April is peak; hurricane risk runs June to October. Trudy reached Category 3 on 16 Oct. <em>Reported.</em></li>
+</ul>
+</section>
+<section>
+<h2>What must change to win</h2>
+<p>These are the gaps between today's leisure offer and a competitive meetings offer (summit objective 3), in priority order.</p>
+<ol>
+<li><strong>An owned baseline:</strong> a log of leads, RFPs, definites and lost business, with lost reasons. Without it, every target is a guess.</li>
+<li><strong>Working-capacity sheets:</strong> floor plans, ceiling heights, columns, loading and power for three to five hotels, plus a calendar of held weekends.</li>
+<li><strong>A group-air plan:</strong> seat schedules by origin, charter and block options, and rules for staggered arrivals.</li>
+<li><strong>A planner-grade safety dossier:</strong> who owns the response, what proof exists, and a protocol for U.S. corporate risk teams.</li>
+<li><strong>A peak-weekend policy:</strong> how weddings and groups share ballrooms and rooms, and what groups are quoted in peak.</li>
+<li><strong>An incentive-grade definition:</strong> which rooms and rate levels qualify, with buyout packages for the boutiques.</li>
+<li><strong>Bid support:</strong> one named point of contact, a standard response pack, and a named-target list within 60 days.</li>
+</ol>
+</section>
+<section>
+<h2>What would settle it</h2>
+<ul>
+<li>Seat schedule by origin and month.</li>
+<li>Group room nights by month and source market, for 2019, 2024 and 2025.</li>
+<li>Weekday and weekend occupancy by month, and weekend wedding booking pace.</li>
+<li>Working capacities from the Wednesday and Thursday inspections, plus one second-tier hotel.</li>
+<li>Delegate counts for the AFEET congress and the guides' congress: they set the real ceiling.</li>
+</ul>
+</section>
+<section class="sources">
+<h2>Sources</h2>
+<p>The full evidence trail is in the advisor's pre-call briefing. Main sources for this page:</p>
+<ul>
+<li>OMA traffic filings, <a href="https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1484718_1.pdf">Jul 2025</a> and <a href="https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1463076_1.pdf">Apr 2025</a>: domestic and international passengers.</li>
+<li>Companion research (links as cited there; not independently verified): <a href="https://news.oma.aero/assets/oma-december-2025-traffic-report-vf-pdf-293d7-f8d04.html?dl=1">OMA Dec 2025</a>, <a href="https://avisos.oma.aero/Reportes_Trafico/2026/9_Septiembre/OMA_Reporte_Trafico_Sep26_vf.pdf">OMA Sep 2026</a>, <a href="https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/ensu/ENSU2026_10_RR.pdf">INEGI ENSU Sep 2026</a>, <a href="https://suracapulco.mx/visitaron-guerrero-en-2025-10-millones-366-mil-863-turistas-informa-sectur-estatal/">El Sur 2025 occupancy</a>, <a href="https://aviability.com/en/airport/zih-ixtapa-zihuatanejo/destinations">aviability route directory</a>, <a href="https://www.azulixtapa.com/en/events/">Azul events</a>, <a href="https://www.azulixtapa.com/en/weddings/">Azul weddings</a>, <a href="https://www.lasbrisashotels.com.mx/en/ixtapa/meetings-and-events/">Las Brisas</a>, <a href="https://www.hyatt.com/thompson-hotels/en-US/zihth-thompson-zihuatanejo/meetings">Thompson</a>, <a href="https://www.ethicalmedtech.eu/wp-content/uploads/2026/06/CVS-2.0-June-2026-Webinar-Code-CVS-Training_Slides_deck_final.pdf">Ethical MedTech</a>.</li>
+<li><a href="https://en.wikipedia.org/wiki/Ixtapa-Zihuatanejo_International_Airport">Wikipedia airport page</a>: 2025 passengers and top routes.</li>
+<li><a href="https://www.cvent.com/venues/zihuatanejo/hotel/azul-ixtapa-beach-resort-convention-center/venue-ed09e807-e6bd-4716-8c72-39e950eeff70">Cvent, Azul Ixtapa Beach Resort and Convention Center</a>: meeting space.</li>
+<li><a href="https://adoption.state.gov/en/international-travel/travel-advisories/mexico.html">State Department text</a> and <a href="https://www.blogto.com/travel/2025/09/canadians-new-travel-advisory-mexico">BlogTO on Canada's advisory</a>: advisories.</li>
+<li><a href="https://www.barcelo.com/es-es/barcelo-ixtapa/bodas/">Barceló Ixtapa weddings</a>: booking lead time.</li>
+<li><a href="https://newsinamerica.com/pdcc/boletin/2026/cancun-acogera-este-ano-varias-convenciones-con-miles-de-personas/">CPTQ via News in America</a>: Cancún congress count.</li>
+<li>Summit program, 17–20 Nov 2026, and the introductory call, 29 Oct 2026.</li>
+</ul>
+</section>
+  </div>
+</main>
+</body>
+</html>

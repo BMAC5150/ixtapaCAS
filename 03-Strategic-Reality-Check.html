@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ixtapa-Zihuatanejo Reality Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
+  --accent: #0d6a75; --accent-soft: #dcecee;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+    --accent: #55bac6; --accent-soft: #17343a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+  --accent: #55bac6; --accent-soft: #17343a; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; display: grid; gap: 32px; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+header { display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.lede { font-size: clamp(1.1rem, 2.2vw, 1.3rem); line-height: 1.45; max-width: 66ch; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 14px 18px; display: grid; gap: 6px; max-width: 80ch; font-size: 0.95rem; }
+.callout b { font-family: var(--display); font-stretch: 85%; font-size: 1.05rem; }
+.doc { counter-reset: sec; display: grid; gap: 22px; }
+.doc section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: grid; gap: 14px; min-width: 0; }
+.doc section h2 { font-size: 1.5rem; font-weight: 750; display: grid; gap: 6px; }
+.doc section h2::before { counter-increment: sec; content: counter(sec, decimal-leading-zero); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; }
+.doc section.sources { background: none; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 18px 0 0; font-size: 0.88rem; color: var(--muted); }
+.doc section.sources h2 { font-size: 1.1rem; }
+.doc section.sources h2::before { content: none; }
+.doc p, .doc li { max-width: 78ch; }
+.doc ul, .doc ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 8px; }
+.doc li::marker { color: var(--accent); }
+.doc ol li::marker { font-family: var(--mono); }
+.doc strong { font-weight: 600; }
+.doc em { color: var(--muted); font-style: normal; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.tbl { width: 100%; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 10px; text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; border-top: 0; }
+td:first-child { font-weight: 600; }
+
+/* Site fix-ups: standalone hosting base styles and back link */
+html, body { margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+.backbar { max-width: var(--bbw, 1080px); margin: 0 auto; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+.backbar a { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+.backbar a:hover { text-decoration: underline; }
+:root { --bbw: 1060px; }
+</style>
+<body>
+<nav class="backbar" aria-label="Site"><a href="index.html">← All CAS work</a></nav>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Working paper · Whether, not only which</div>
+    <h1>Strategic Reality Check: Is International Business Events Worth It?</h1>
+    <div class="meta"><span>PCMA Customer Advisory Summit, 17–20 Nov 2026</span><span>29 Oct 2026</span><span>B Mac, PCMA advisor</span></div>
+    <p class="lede">The program asks which events Ixtapa-Zihuatanejo can win, not whether winning them pays. At realistic scale, business events are a low-single-digit share of room nights, so the case rests on timing and rate.</p>
+  </header>
+  <aside class="callout" aria-label="Evidence and limits"><b>Evidence and limits</b><p>The economics are illustrative and gross. State figures are press releases, not audited statistics, and the destination's own baseline (weekday occupancy, group room nights, lead and lost-business data) is still missing.</p></aside>
+  <div class="doc">
+<section>
+<h2>Bottom line</h2>
+<p>Five concerns are the right questions, and the summit's design does not ask them. The program asks which events Ixtapa-Zihuatanejo can win, not whether winning them pays. On the evidence so far, the concerns hold.</p>
+<ul>
+<li><strong>No baseline:</strong> confirmed. The hard recent series is airport traffic: international fell 8.8% in 2025 and 8.9% more in Jan–Sep 2026. A state-reported 2025 occupancy of 65.5% exists but is unreconciled. Seasonal figures are press releases, and the statistics offered on the call are 10–15 years old.</li>
+<li><strong>The "why":</strong> not articulated on the call. The hosts voiced belief and enthusiasm, not a goal or a metric.</li>
+<li><strong>Implications:</strong> heavy and largely unexamined. International events need lift, incentive-grade rooms, working space, a local host base and years of sales effort. All of Mexico hosts about 191 ICCA congresses a year across 36 cities.</li>
+<li><strong>The prize:</strong> modest. An ambitious domestic-led program of 30 events a year is about 1–2% of sold room nights. An international-led version is smaller still. (Illustrative; assumptions in the economics section.)</li>
+<li><strong>Leisure alternative:</strong> unresolved for lack of data. But air, a safety proof, data and product quality serve both segments, so meetings' incremental cost may be mostly the sales layer.</li>
+</ul>
+<p><strong>Recommended approach:</strong> support the goal, ask the hosts to state the "why" and the bar, then stage-gate: a 60-day baseline, then a domestic and incentive pilot, then international only if the pilot clears the bar.</p>
+</section>
+<section>
+<h2>The baseline we can build today</h2>
+<p>Without the destination's data, public sources give a partial reality check. It shows a healthy leisure destination at peak, with growth coming from domestic traffic.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Source</th>
+<th>Tag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Airport passengers, 2022 to 2025</td>
+<td>593,354 → 654,392 → 674,660 → 733,616; +23.6% in three years, about 7.3% a year</td>
+<td><a href="https://en.wikipedia.org/wiki/Ixtapa-Zihuatanejo_International_Airport">OMA data via Wikipedia</a></td>
+<td>Verified (operator data)</td>
+</tr>
+<tr>
+<td>2025 split</td>
+<td>Domestic 531,996 (+17.3%); international 201,620 (−8.8%). International share fell from 32.8% in 2024 to 27.5%</td>
+<td><a href="https://news.oma.aero/assets/oma-december-2025-traffic-report-vf-pdf-293d7-f8d04.html?dl=1">OMA Dec 2025 release</a>, via the companion briefing</td>
+<td>Verified (operator data)</td>
+</tr>
+<tr>
+<td>Jan–Sep 2026</td>
+<td>Total 573,367 (+5.2%); domestic +10.6%; international 138,140 (−8.9%). September international: 2,191 (−31.3%)</td>
+<td><a href="https://avisos.oma.aero/Reportes_Trafico/2026/9_Septiembre/OMA_Reporte_Trafico_Sep26_vf.pdf">OMA Sep 2026 release</a>, via the companion briefing</td>
+<td>Verified (operator data)</td>
+</tr>
+<tr>
+<td>Peak winter traffic, Jan–Apr 2025</td>
+<td>+0.2%</td>
+<td><a href="https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1463076_1.pdf">OMA filing</a></td>
+<td>Verified (operator data)</td>
+</tr>
+<tr>
+<td>Winter 2025 season</td>
+<td>232,000 tourists, about MXN 2.0 billion, about 80% occupancy</td>
+<td><a href="https://amp.milenio.com/estados/sectur-reconoce-resultados-economicos-turisticos-guerrero">State tourism secretariat via Milenio</a></td>
+<td>Reported</td>
+</tr>
+<tr>
+<td>Year-end 2024–25 season</td>
+<td>136,981 visitors, MXN 1,177 million, 82.6% occupancy</td>
+<td><a href="https://www.vocero.com.mx/?p=393959">State via Vocero</a></td>
+<td>Reported</td>
+</tr>
+<tr>
+<td>Summer 2025</td>
+<td>Two reports conflict: 262,893 tourists at 74% (<a href="https://www.vocero.com.mx/?p=403063">Vocero</a>) and 371,937 visitors with MXN 3.66 billion (<a href="https://www.vocero.com.mx/?p=403492">Vocero</a>); likely different periods</td>
+<td>State</td>
+<td>Reported; unreconciled</td>
+</tr>
+<tr>
+<td>Annual occupancy, 2025</td>
+<td>65.5% state-reported (64.9% in 2019); a FONATUR page says 61.7%; geography unverified</td>
+<td><a href="https://suracapulco.mx/visitaron-guerrero-en-2025-10-millones-366-mil-863-turistas-informa-sectur-estatal/">El Sur</a>, via the companion briefing</td>
+<td>Reported; unreconciled</td>
+</tr>
+<tr>
+<td>Share of international visitors</td>
+<td>Canada and the U.S. about 40% of the annual total (state); airport international movements were 27.5% in 2025. The measures differ</td>
+<td><a href="https://www.vocero.com.mx/?p=403063">State via Vocero</a></td>
+<td>Reported</td>
+</tr>
+<tr>
+<td>Spend per tourist per season</td>
+<td>About MXN 8,600–9,800 (about US$440–500 at MXN 19.5), derived from the three seasons above</td>
+<td>Arithmetic on state figures</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>Hotel rooms</td>
+<td>About 3,300 to 6,500; sources disagree</td>
+<td>Various</td>
+<td>Hypothesis</td>
+</tr>
+</tbody>
+</table></div>
+<p>What is still missing: weekday occupancy, ADR, group share, lead and lost-business data, and a reconciled annual baseline. That is the baseline the concern is about, and the summit has no plan to produce it.</p>
+</section>
+<section>
+<h2>Do they know why?</h2>
+<p>Not on the evidence of the call. The hosts stated belief and enthusiasm; nobody stated a goal, a number or a trade-off.</p>
+<p>What the call showed:</p>
+<ul>
+<li><strong>The framing:</strong> Eduardo described the aim as converting a successful leisure destination into a meetings, incentive and Latin American association destination, and helping it "internationalize" what it already does in the Mexican market.</li>
+<li><strong>The hosts:</strong> the municipal tourism director said he believes in the segment. The bureau director said the industry and government work together. The international promotion manager hedged on who started the initiative.</li>
+<li><strong>What was missing:</strong> a target in room nights, months or revenue, and any mention of what would be given up to fund it.</li>
+</ul>
+<p>Candidate whys, each with the metric that would prove it:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Candidate "why"</th>
+<th>Metric that would show success</th>
+<th>What the evidence says now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fill the midweek and shoulder trough</td>
+<td>Net incremental Sunday–Thursday room nights in November and May–October</td>
+<td>Weekend peak readings are 81–95%; weekday and shoulder data are unpublished. Annual occupancy is state-reported at 65.5%, and one report puts summer 2025 at 74%</td>
+</tr>
+<tr>
+<td>Raise rate and spend per guest</td>
+<td>ADR and spend per guest against leisure</td>
+<td>State spend per tourist is about MXN 8,600–9,800. Sectur puts a 2022 domestic meetings participant at US$850, so the premium may shrink in an all-inclusive economy (hypothesis)</td>
+</tr>
+<tr>
+<td>Diversify away from leisure and advisory exposure</td>
+<td>Share of room nights from non-leisure and non-U.S. sources</td>
+<td>Canada and the U.S. are about 40% of visitors, and leisure faces the same U.S. advisory text</td>
+</tr>
+<tr>
+<td>Raise the destination's profile</td>
+<td>Planner awareness, RFP volume, bids won</td>
+<td>No data. Awards such as the 2025 World Travel Awards title are popularity-style</td>
+</tr>
+<tr>
+<td>Build local skills and better jobs</td>
+<td>Jobs in sales, PCO and DMC work</td>
+<td>The call described a "modest" local economy. Local higher education exists (TecNM and the Universidad Tecnológica de la Costa Grande, applied and technical), although the call said there were no universities</td>
+</tr>
+</tbody>
+</table></div>
+<p>A good answer sounds like this: "By 2029, X net incremental midweek room nights in named months, at an ADR of at least Y, from Z source markets, at a cost under W per room night." A weak answer is "to become a meetings destination."</p>
+</section>
+<section>
+<h2>What it would take</h2>
+<p>The gap between a leisure destination and an international business events destination is wide on every dimension, and widest on the ones a bureau cannot fix alone.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>What international business events require</th>
+<th>What the evidence shows</th>
+<th>Gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scale</td>
+<td>Plenary, breakouts and rooms for the group; arrivals spread over days</td>
+<td>One large hall; about 1,000 arrivals a day on average; 800 delegates need 89–111% of Azul's two hotels, and 1,000 exceeds them</td>
+<td>Conditional band to 800; 1,000 is out</td>
+</tr>
+<tr>
+<td>Air</td>
+<td>Direct or one-connection lift matched to group size</td>
+<td>Seasonal routes; about 29 weekly U.S. and Canada flights this winter (directory); Toronto cut; international fell 8.8% in 2025 and 8.9% more in Jan–Sep 2026</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Rooms</td>
+<td>Incentive-grade quality and group rates</td>
+<td>About 110 luxury rooms in two boutiques; the larger tier is 4 to 4.5 star all-inclusive</td>
+<td>High for incentive</td>
+</tr>
+<tr>
+<td>Space</td>
+<td>Working capacity, ceiling height, columns, loading</td>
+<td>Stated maxima imply about 1.2–1.4 m² per classroom or banquet seat; elsewhere rooms are small; Thompson's enclosed working space is a 12-person boardroom</td>
+<td>Unknown until inspected</td>
+</tr>
+<tr>
+<td>Shared capacity</td>
+<td>Dates and halls not committed to weddings or leisure</td>
+<td>Azul sells weddings from the same facilities; booking guidance is 9–12 months ahead</td>
+<td>Date-specific</td>
+</tr>
+<tr>
+<td>Local expertise</td>
+<td>PCOs, DMCs, AV, English-language bids</td>
+<td>PCOs and experienced hotel managers exist; the bidding book is in Spanish only</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Host base</td>
+<td>Universities, hospitals and industry chapters to champion association bids</td>
+<td>Local higher education exists but is applied and technical (TecNM and the Universidad Tecnológica de la Costa Grande); no research base was shown; the economy is fishing and tourism</td>
+<td>High for associations</td>
+</tr>
+<tr>
+<td>Safety evidence</td>
+<td>A documented case for travel-risk teams</td>
+<td>Self-reported assurances on the call; U.S. text bars federal employees; INEGI Sept 2026: 60.5% of residents call the city unsafe (58.1% nationally); threats reported in Zihuatanejo's mountain communities on 26 Oct</td>
+<td>High for the U.S.</td>
+</tr>
+<tr>
+<td>Sales engine</td>
+<td>An RFP desk, bid funds, a multi-year pipeline</td>
+<td>Current RFP volume unknown</td>
+<td>Unknown</td>
+</tr>
+</tbody>
+</table></div>
+<p>Competitive reality:</p>
+<ul>
+<li><strong>The national field is thin and concentrated.</strong> All of Mexico hosted about 191 ICCA congresses in 36 cities (<a href="https://www.publimetro.com.mx/opinion/2026/08/06/la-ciudad-de-mexico-capital-de-congresos-y-convenciones/">Publimetro, Aug 2026</a>), about five a city on average. Mexico City, Guadalajara, Monterrey and Cancún lead (<a href="https://forbes.com.mx/?p=187991">Forbes México</a>, older).</li>
+<li><strong>Cancún's center alone hosted 19 congresses in 2025,</strong> seven of them world-level (<a href="https://newsinamerica.com/pdcc/boletin/2026/cancun-acogera-este-ano-varias-convenciones-con-miles-de-personas/">News in America</a>).</li>
+<li><strong>The hosts benchmark against Puerto Vallarta</strong> and said it has better connectivity (call).</li>
+<li><strong>Time horizons differ:</strong> association bids are typically won two to five years out (general knowledge), against a promotion horizon the hosts have not stated.</li>
+<li><strong>One possible channel:</strong> COMIR and Sectur are forming a national convention bureau (<a href="https://www.revistaequipar.com/noticia/mexico-da-un-paso-firme-en-la-industria-de-reuniones">Revista Equipar</a>). Ask whether Ixtapa is engaged.</li>
+</ul>
+</section>
+<section>
+<h2>Is the incremental contribution worth it?</h2>
+<p>At realistic scale, business events are a low-single-digit slice of the destination's room nights. Their value is in timing and rate, not volume. These scenarios are illustrative and gross.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Events a year × delegates</th>
+<th>Room nights</th>
+<th>Share of sold room nights</th>
+<th>Gross delegate spend</th>
+<th>Share of one season's state-reported spillover</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modest, domestic</td>
+<td>15 × 150, 2.5 nights</td>
+<td>5,063</td>
+<td>0.3–0.6%</td>
+<td>US$1.9M (about MXN 37M)</td>
+<td>3%</td>
+</tr>
+<tr>
+<td>Ambitious, domestic</td>
+<td>30 × 200, 3 nights</td>
+<td>16,200</td>
+<td>1.0–2.1%</td>
+<td>US$5.1M (about MXN 99M)</td>
+<td>8%</td>
+</tr>
+<tr>
+<td>Conditional band, domestic</td>
+<td>3 × 600, 3 nights</td>
+<td>4,860</td>
+<td>0.3–0.6%</td>
+<td>US$1.5M (about MXN 30M)</td>
+<td>3%</td>
+</tr>
+<tr>
+<td>International-led</td>
+<td>5 × 200, 3.5 nights</td>
+<td>3,150</td>
+<td>0.2–0.4%</td>
+<td>US$2.2M (about MXN 43M)</td>
+<td>4%</td>
+</tr>
+</tbody>
+</table></div>
+<p>Assumptions:</p>
+<ul>
+<li><strong>Rooms:</strong> 0.9 rooms per delegate (a general planning norm).</li>
+<li><strong>Base:</strong> 0.8–1.6 million sold room nights a year, from 3,300–6,500 rooms at the state-reported 65.5% annual occupancy (geography unverified).</li>
+<li><strong>Spend:</strong> US$850 per domestic participant and US$2,219 per international congress participant (<a href="https://www.vocero.com.mx/?p=381082">Sectur, 2022, via Vocero</a>); about MXN 19.5 per US$.</li>
+<li><strong>Comparison:</strong> one season's spillover of MXN 1,177 million (year-end 2024–25, state-reported), not the whole year.</li>
+</ul>
+<p>How to read it:</p>
+<ul>
+<li><strong>Domestic beats international on return.</strong> The international-led case yields less because event counts are low and bids are slow.</li>
+<li><strong>These figures are gross.</strong> Only room nights that would otherwise sit empty are incremental. Weekday and shoulder data decide that, and they are missing.</li>
+<li><strong>The spend premium may be smaller here.</strong> Sectur's US$850 is about 1.7–1.9 times the state's leisure spend per tourist, but the bases differ and all-inclusive guests already pay for a full stay. Claims of "six times" are promotional.</li>
+<li><strong>The hotel captures most delegate spend.</strong> The call described a modest local economy, so leakage to local businesses is uncertain.</li>
+<li><strong>Stays are short.</strong> An older Sectur study (2010 data) put corporate meetings at about 2.3 nights, so room nights run lower than leisure.</li>
+<li><strong>Against annual activity the prize is smaller still.</strong> A reported MXN 21.6 billion of 2025 tourism economic activity (<a href="https://rtg.com.mx/ixtapa-zihuatanejo-alcanza-los-700-mil-pasajeros-aereos-y-reafirma-su-posicionamiento-turistico/">RTG</a>, via the companion briefing; unreconciled) would put these scenarios at about 0.2–0.5% of it.</li>
+<li><strong>The cost side is unknown.</strong> Ask for the bureau's budget, headcount and leisure-versus-meetings split, then compute cost per net incremental room night.</li>
+</ul>
+</section>
+<section>
+<h2>Could the money be better spent on leisure?</h2>
+<p>It depends on marginal return per peso, and nobody can compute that today. The evidence suggests the two compete less than they appear to on shared investments, and more on sales effort.</p>
+<ul>
+<li><strong>Shared investments:</strong> air route support, a planner-grade safety proof, a data system, and product quality serve leisure and meetings alike. The U.S. advisory text hits leisure too, and Canada and the U.S. are about 40% of visitors.</li>
+<li><strong>Meetings-only costs:</strong> a bid desk, trade shows such as IMEX America and IBTM, familiarization trips, bid funds, English-language materials, working-capacity upgrades.</li>
+<li><strong>Leisure's weak spots:</strong> international traffic fell 8.8% in 2025 and another 8.9% in Jan–Sep 2026, peak winter was flat, and every published seasonal occupancy reading is a weekend or holiday snapshot. Those are leisure problems that leisure money could address.</li>
+<li><strong>The counter-case for meetings:</strong> Sectur argues meetings steady low-season occupancy (<a href="https://www.vocero.com.mx/?p=381082">Vocero</a>). That is true only if a weekday and shoulder trough exists, and the hosts have not shown it.</li>
+</ul>
+<p>A decision test the hosts could run on three options:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Metric</th>
+<th>Data needed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meetings sales program</td>
+<td>Cost per net incremental room night; payback time</td>
+<td>Bureau budget; group and weekday occupancy data</td>
+</tr>
+<tr>
+<td>Leisure shoulder and midweek promotion</td>
+<td>Cost per net incremental room night</td>
+<td>Campaign spend; monthly occupancy</td>
+</tr>
+<tr>
+<td>Airline route support</td>
+<td>Cost per added seat and per room night</td>
+<td>Seat schedules; route load factors</td>
+</tr>
+</tbody>
+</table></div>
+<p>The third way is a domestic corporate and incentive pilot of 100–300 delegates, using existing inventory with no new facilities and a small sales layer. If the pilot clears the bar, scale it. If not, the money goes back to leisure, and the baseline work still pays off.</p>
+</section>
+<section>
+<h2>A staged path</h2>
+<p>The aim is to turn "we believe in this" into a bar the hosts set themselves.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>What happens</th>
+<th>Proposed decision rule (the hosts set the numbers)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. Baseline, within 60 days</td>
+<td>A one-page view: monthly and weekday occupancy, group room nights by source market, the RFP and lead log, the bureau's budget split, and a written "why"</td>
+<td>Proceed only if a weekday or shoulder trough is shown</td>
+</tr>
+<tr>
+<td>1. Domestic and incentive pilot, 12 months</td>
+<td>Three to five named accounts, 100–300 delegates, midweek in shoulder months</td>
+<td>Net incremental room nights, ADR and cost per room night against the leisure benchmark</td>
+</tr>
+<tr>
+<td>2. International, only if Gate 1 clears</td>
+<td>One or two targeted corporate or incentive pursuits; association bids only with a local host-base partner</td>
+<td>Air, safety evidence and working-space checks in place first</td>
+</tr>
+</tbody>
+</table></div>
+<p>The small yes: a one-page baseline plus a written "why" and bar, within 60 days, before real budget is committed.</p>
+</section>
+<section class="sources">
+<h2>Sources</h2>
+<p>Figures come from search excerpts as of 29 Oct 2026. State-reported figures are press releases, not audited statistics.</p>
+<ul>
+<li>Introductory call transcript, 29 Oct 2026.</li>
+<li>Companion research, 29 Oct 2026 (links as cited there; not independently verified): OMA Dec 2025, OMA Sep 2026, INEGI ENSU Sep 2026, El Sur 2025 occupancy, RTG 2025 visitors and activity, aviability route directory, <a href="https://www.costagrande.tecnm.mx/principal/9">TecNM Costa Grande</a>, <a href="https://utcgg.edu.mx/">UT Costa Grande</a>, <a href="https://www.azulixtapa.com/en/weddings/">Azul weddings</a>. Links for the first five are in the tables above.</li>
+<li>OMA traffic filings, <a href="https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1484718_1.pdf">Jul 2025</a> and <a href="https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1463076_1.pdf">Apr 2025</a>: domestic and international passengers.</li>
+<li><a href="https://amp.milenio.com/estados/sectur-reconoce-resultados-economicos-turisticos-guerrero">Milenio, winter 2025 results</a> and <a href="https://www.vocero.com.mx/?p=393959">Vocero, year-end 2024–25</a>: season figures.</li>
+<li>Vocero, <a href="https://www.vocero.com.mx/?p=403063">summer figures</a> and <a href="https://www.vocero.com.mx/?p=403492">second summer report</a>: conflicting summer reports; 40% Canada and U.S. share.</li>
+<li><a href="https://www.vocero.com.mx/?p=381082">Vocero, Sectur spend per participant</a>: US$850 and US$2,219.</li>
+<li><a href="https://www.revistabuenviaje.com/b_travel/articulos/relevancia-tder/turismo_reuniones.pdf">Sectur and CESTUR meetings study</a>: stay lengths and spend (older data).</li>
+<li>Publimetro, Aug 2026: Mexico's ICCA congresses.</li>
+<li>News in America: Cancún congresses.</li>
+<li>Revista Equipar: national convention bureau.</li>
+<li>Earlier work: the pre-call briefing and the <a href="02-Segment-Fit-Working-View.html">segment fit working view</a>.</li>
+</ul>
+</section>
+  </div>
+</main>
+</body>
+</html>

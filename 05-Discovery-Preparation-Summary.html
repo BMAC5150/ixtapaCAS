@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ixtapa-Zihuatanejo Readiness Summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a departures-board header, four block cards on one readiness scale, then where to play and the ask */
+:root {
+  --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
+  --accent: #0d6a75; --accent-soft: #dcecee;
+  --crit: #b13e35; --warn: #b5741c; --part: #8f8318; --ok: #2f7d4f; --empty: #d9e2e4;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+    --accent: #55bac6; --accent-soft: #17343a;
+    --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #2a3d43;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+  --accent: #55bac6; --accent-soft: #17343a;
+  --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #2a3d43;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 1.55rem; font-weight: 750; }
+h3 { font-size: 1.3rem; font-weight: 700; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.muted { color: var(--muted); }
+
+/* header */
+header { display: grid; gap: 16px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.verdict { font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.45; max-width: 62ch; }
+.verdict strong { color: var(--accent); font-weight: 600; }
+
+/* callout */
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 16px 20px; display: grid; gap: 6px; max-width: 78ch; }
+.callout b { font-family: var(--display); font-stretch: 85%; font-size: 1.05rem; }
+.callout p { font-size: 0.95rem; }
+
+/* board */
+.board { display: grid; gap: 14px; }
+.board-head { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 8px; }
+.scale { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); font-family: var(--mono); }
+.scale span { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.rows { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.row { display: grid; grid-template-columns: 2.2rem minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1.6fr); gap: 14px; align-items: center; padding: 14px 18px; border-top: 1px solid var(--line); }
+.row:first-child { border-top: 0; }
+.row .num { font-family: var(--mono); font-size: 1.1rem; color: var(--muted); }
+.row .name { font-family: var(--display); font-stretch: 85%; font-weight: 700; font-size: 1.08rem; }
+.row .binds { font-size: 0.92rem; color: var(--muted); }
+.row a { color: inherit; text-decoration: none; }
+.row a:hover .name, .row a:focus-visible .name { color: var(--accent); }
+.meter { display: grid; gap: 6px; }
+.bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; max-width: 150px; }
+.bars i { height: 8px; border-radius: 2px; background: var(--empty); }
+.chip { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; }
+
+/* block cards */
+.blocks { display: grid; gap: 22px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: grid; gap: 18px; scroll-margin-top: 16px; }
+.card-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: start; }
+.bignum { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: 3rem; line-height: 0.9; color: var(--line); }
+.card-head .sub { font-size: 0.9rem; color: var(--muted); margin-top: 4px; }
+.badge { justify-self: end; padding: 5px 10px; border-radius: 999px; border: 1.5px solid currentColor; white-space: nowrap; }
+.card .lead { font-size: 1.08rem; max-width: 70ch; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.fact { border-top: 2px solid var(--ink); padding-top: 10px; display: grid; gap: 4px; align-content: start; }
+.fact .v { font-family: var(--display); font-stretch: 80%; font-weight: 750; font-size: 1.75rem; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.fact .l { font-size: 0.88rem; color: var(--muted); }
+.impl { background: var(--bg); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; }
+.impl .k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 0.9rem; }
+.foot .test { color: var(--muted); }
+.foot .test b { color: var(--ink); font-weight: 600; }
+button.more { font: inherit; font-size: 0.88rem; font-weight: 600; color: var(--accent); background: none; border: 1.5px solid var(--accent); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+button.more:hover { background: var(--accent-soft); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.points { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; max-width: 75ch; }
+.points li::marker { color: var(--accent); }
+
+/* play / ask */
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 12px; align-content: start; }
+.panel ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.panel li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.panel li::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--mk); transform: translateY(1px); }
+.go { --mk: var(--ok); }
+.no { --mk: var(--crit); }
+.ask { border: 2px solid var(--accent); }
+.ask ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 8px; }
+.sources { font-size: 0.88rem; color: var(--muted); display: grid; gap: 4px; border-top: 1px solid var(--line); padding-top: 18px; }
+.sources a { color: var(--accent); }
+
+@media (max-width: 760px) {
+  .row { grid-template-columns: 2rem minmax(0, 1fr); }
+  .row .meter, .row .binds { grid-column: 2; }
+  .facts { grid-template-columns: 1fr; }
+  .split { grid-template-columns: 1fr; }
+  .card-head { grid-template-columns: auto minmax(0, 1fr); }
+  .badge { grid-column: 1 / -1; justify-self: start; }
+  .bignum { font-size: 2.4rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card { transition: border-color .2s; }
+  .card:target { border-color: var(--accent); }
+}
+
+/* elements for CAS */
+.elements { background: var(--surface); border: 2px solid var(--ink); border-radius: 16px; padding: 26px; display: grid; gap: 20px; }
+.elements .intro { max-width: 72ch; }
+.el-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.el { scroll-margin-top: 16px; border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; align-content: start; background: var(--bg); }
+.el-top { display: flex; align-items: baseline; gap: 12px; }
+.el-top .n { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: 2.2rem; line-height: 0.9; color: var(--accent); }
+.el .q { font-weight: 600; font-size: 1.02rem; }
+.el .k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.el ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 6px; font-size: 0.95rem; }
+.el ul li::marker { color: var(--accent); }
+.el .ev { font-size: 0.92rem; font-weight: 600; color: var(--accent); }
+.el .now { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+@media (max-width: 760px) { .el-grid { grid-template-columns: 1fr; } .elements { padding: 18px; } }
+
+/* Site fix-ups: standalone hosting base styles and back link */
+html, body { margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+.backbar { max-width: var(--bbw, 1080px); margin: 0 auto; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+.backbar a { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+.backbar a:hover { text-decoration: underline; }
+:root { --bbw: 1060px; }
+</style>
+
+<nav class="backbar" aria-label="Site"><a href="index.html">← All CAS work</a></nav>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const { useState } = React;
+const html = htm.bind(React.createElement);
+
+const LEVELS = {
+  crit: { fill: 1, color: "var(--crit)" },
+  warn: { fill: 2, color: "var(--warn)" },
+  part: { fill: 3, color: "var(--part)" },
+};
+
+const BLOCKS = [
+  {
+    id: "access", n: 1, title: "Participant access", sub: "Air transportation infrastructure and constraints",
+    rating: "Deal-breaker for international", tone: "crit",
+    binds: "Winter-only, narrow-body air that is shrinking; each big gateway rests on one airline",
+    lead: "Air alone keeps international-majority events off the table today, and it sets the ceiling for every other segment. There are currently no direct flights from other Latin American gateways.",
+    facts: [
+      ["82%", "of 2025 international passengers flew November to April"],
+      ["−7.2%", "international passengers, January to April 2026"],
+      ["920 vs 68", "domestic vs international arrivals a day, August 2026"],
+    ],
+    points: [
+      "Domestic air is the strength: Mexico City is 50 to 60 minutes away, with new routes such as Puebla and Monterrey.",
+      "November is a shoulder month that challenges access: San Francisco starts 21 Nov, Montreal 18 Dec, Chicago 19 Dec and Minneapolis 20 Dec.",
+      "International fell 8.8% in 2025 and September 2026 was down 31%. International's share of traffic fell from 32.8% in 2024 to 25.3% in January to August 2026.",
+      "Los Angeles, Dallas, Houston and Calgary each show a single airline, and Air Canada dropped its planned Toronto flight weeks before launch.",
+      "Narrow-body only: one terminal, six gates and six stands. No Latin American or European nonstop.",
+      "A 300-delegate international group equals about a full day of November's international arrivals and almost six days of September's.",
+    ],
+    implication: "North American groups of 100 to 300 in shoulder weeks are the only international case worth testing, and only if lift is underwritten. Route support is the one air lever the promotion trust can pull.",
+    test: "Seat schedule by gateway and month; group and charter history",
+  },
+  {
+    id: "infrastructure", n: 2, title: "Business event infrastructure", sub: "Onsite event services, segment-appropriate meeting space, committable sleeping rooms",
+    rating: "Partial and unproven", tone: "part",
+    binds: "One large Event Center; commitable rooms unknown; onsite services not evidenced",
+    lead: "One large Event Center and plausible room supply, but working capacity and commitable room nights are unknown, and onsite services are not evidenced.",
+    facts: [
+      ["1 Event Center", "of scale: Azul Ixtapa, 2,400 theater at its stated maximum"],
+      ["3,300–6,500", "rooms by source, none confirmed as commitable"],
+      ["33–41%", "of Azul's two hotels needed each night for 300 delegates"],
+    ],
+    points: [
+      "Las Brisas offers 936 m2 and 1,100 theater; other rooms are about 500 or smaller. No stand-alone convention center found.",
+      "Stated maxima imply about 1.2 to 1.4 m2 per classroom or banquet seat, tighter than common planning norms, so treat them as maximums.",
+      "The luxury tier is about 110 rooms in two boutiques, which suits retreats and boards rather than meetings of 100 or more.",
+      "Weddings are a headline product sold from shared Azul facilities, and weekend occupancy readings of 81 to 95% leave weekends unlikely for groups.",
+      "Onsite services rest on marketing claims only. No DMC inventory, AV capacity, staffing depth or planner references were found.",
+    ],
+    implication: "The real ceiling is the working capacity of one Event Center and the rooms a hotel will commit midweek. Scale beyond 300 needs multi-hotel blocks.",
+    test: "Working capacity against listed maxima; commitable room nights by month",
+  },
+  {
+    id: "marketplace", n: 3, title: "Marketplace awareness and competitive set", sub: "Awareness, perception, buyer eligibility and the alternatives buyers weigh",
+    rating: "Weak for international", tone: "warn",
+    binds: "Known as a leisure resort; U.S. advisory text and buyer risk approval",
+    lead: "Known in the Mexican meetings market but not internationally, with a buyer-approval barrier that marketing cannot remove alone. Canada advises avoiding non-essential travel to Guerrero, except to Ixtapa and Zihuatanejo when reached by air; the exception does not cover road approaches or excursions.",
+    facts: [
+      ["Guerrero", "U.S. advisory text bars U.S. government employees statewide"],
+      ["60.5%", "of residents call their city unsafe (INEGI, Sep 2026)"],
+      ["7th–10th", "among Mexican event destinations (BMAC's judgment)"],
+    ],
+    points: [
+      "The consumer site files groups under lodging, with no RFP route, planner assets or named meetings contact.",
+      "IBTM, IMEX, a Spanish bidding book and a 2025 travel award are inputs, none tied to a booked international event. Recent wins are small domestic tourism-sector congresses.",
+      "Canada and the UK except Ixtapa and Zihuatanejo when reached by air. No planner-facing safety materials were found.",
+      "Buyers compare Puerto Vallarta and Riviera Nayarit, Cancún and Riviera Maya, Huatulco, Mazatlán and Los Cabos. Cancún's center alone hosted 19 congresses in 2025.",
+      "No rate-shopping, competitor inventory audit or matched seat study has been done.",
+    ],
+    implication: "Awareness and perception, not price, decide whether international buyers consider the destination at all. Start where the market knows it, Mexican then Canadian groups, and build proof first.",
+    test: "Who raises safety, who answers and with what proof; why past groups chose it",
+  },
+  {
+    id: "resources", n: 4, title: "Business development resources", sub: "Team, budget, data, governance and sales tools",
+    rating: "Not ready", tone: "crit",
+    binds: "Leisure-promotion team, US$3.1M current budget, no meetings line, no data",
+    lead: "A leisure promoter with limited means, no baseline and no shown strategy, so any new initiative has to start small and be staged.",
+    facts: [
+      ["US$3.1M", "CURRENT BUDGET (inferred)"],
+      ["99.3%", "of the 2026 budget classed communications and publicity"],
+      ["US$0.3–0.7M", "a year for a CVB meetings initiative investment including CRM (estimate)"],
+    ],
+    points: [
+      "No goal, metric, budget or owner was named, and no one on the 29 Oct call holds a meetings or sales title.",
+      "No group, RFP, lost-business, ADR or RevPAR data was offered; the statistics on hand are 10 to 15 years old.",
+      "Moving money toward meetings needs a decision by the trust committee of state, municipal, hotel-association and developer seats.",
+      "Local higher education is applied and technical, and no association chapters or named ambassadors were shown.",
+      "A real association bid can require the host to sponsor flights and hotels for dozens of executives.",
+    ],
+    implication: "Ask for a named owner, a committed budget and a multi-year authority, not a bigger campaign. The destination's own lead, RFP and lost-business data is its biggest untapped asset.",
+    test: "A named owner, a budget authority in the room, a baseline in the report",
+  },
+];
+
+function Meter({ tone, label }) {
+  const lv = LEVELS[tone];
+  return html`<div class="meter" aria-label=${"Rating: " + label}>
+    <div class="bars">${[0, 1, 2, 3].map(i => html`<i key=${i} style=${i < lv.fill ? { background: lv.color } : null}></i>`)}</div>
+    <span class="chip" style=${{ color: lv.color }}>${label}</span>
+  </div>`;
+}
+
+function Board() {
+  return html`<section class="board" aria-labelledby="glance">
+    <div class="board-head">
+      <div><div class="eyebrow">Review at a glance</div><h2 id="glance">Pre-CAS Scorecard</h2></div>
+      <div class="scale" aria-hidden="true">
+        <span><i class="dot" style=${{ background: "var(--crit)" }}></i>Not ready</span>
+        <span><i class="dot" style=${{ background: "var(--warn)" }}></i>Weak</span>
+        <span><i class="dot" style=${{ background: "var(--part)" }}></i>Partial</span>
+        <span><i class="dot" style=${{ background: "var(--ok)" }}></i>Ready</span>
+      </div>
+    </div>
+    <div class="rows">
+      ${BLOCKS.map(b => html`<div class="row" key=${b.id}>
+        <span class="num">0${b.n}</span>
+        <a href=${"#" + b.id}><span class="name">${b.title}</span></a>
+        <${Meter} tone=${b.tone} label=${b.rating} />
+        <span class="binds">${b.binds}</span>
+      </div>`)}
+    </div>
+    <p class="muted">Access is the hardest limit for international events, perception is the hardest gate for buyers, and the first two blocks cannot be judged properly until the destination's own data exists.</p>
+  </section>`;
+}
+
+function Card({ b }) {
+  const [open, setOpen] = useState(false);
+  const lv = LEVELS[b.tone];
+  return html`<article class="card" id=${b.id} aria-labelledby=${b.id + "-h"}>
+    <div class="card-head">
+      <span class="bignum" aria-hidden="true">${b.n}</span>
+      <div><h3 id=${b.id + "-h"}>${b.title}</h3><p class="sub">${b.sub}</p></div>
+      <span class="badge chip" style=${{ color: lv.color }}>${b.rating}</span>
+    </div>
+    <p class="lead">${b.lead}</p>
+    <div class="facts">
+      ${b.facts.map(([v, l]) => html`<div class="fact" key=${v}><span class="v">${v}</span><span class="l">${l}</span></div>`)}
+    </div>
+    <div class="impl"><span class="k">What it means</span><p>${b.implication}</p></div>
+    ${open && html`<ul class="points" id=${b.id + "-more"}>${b.points.map(p => html`<li key=${p}>${p}</li>`)}</ul>`}
+    <div class="foot">
+      <span class="test"><b>Test at CAS:</b> ${b.test}</span>
+      <button class="more" type="button" aria-expanded=${open} aria-controls=${b.id + "-more"} onClick=${() => setOpen(!open)}>${open ? "Hide evidence" : "Show evidence"}</button>
+    </div>
+  </article>`;
+}
+
+const ELEMENTS = [
+  {
+    n: 1, name: "Customer",
+    q: "Who is the targeted business events customer, and what need does the Ixtapa-Zihuatanejo product fulfil for them?",
+    why: "The best customers are those who can reach the destination easily and approve travel to it. Air and advisory realities narrow the field before marketing begins.",
+    ask: [
+      "Which named accounts have booked in the last 24 months, and why did they choose us?",
+      "What need do we meet better than anyone: focus, privacy, reward, value or something else?",
+      "Which segments are we choosing not to pursue now, and why?",
+      "What does our lead and lost-business record say about who we win and lose?",
+    ],
+    evidence: "Evidence we need: visitor arrivals by source market, group room nights by source market, the accounts booked in the last 24 months, and the lead and lost-business log with lost reasons.",
+    now: "Starting point: Mexican corporate and incentive groups, then Canadian groups December to March. U.S. buyers must clear a travel-risk policy; international associations come later.",
+  },
+  {
+    n: 2, name: "Product",
+    q: "What is the ideal business events product and experience the community can remarkably and consistently deliver?",
+    why: "Planners buy what a destination delivers every time, not what it can stage at its best. Today that is one Event Center, rooms not yet committed to groups, and onsite services that rest on marketing claims.",
+    ask: [
+      "Which program can we deliver flawlessly every time, midweek and outside peak weekends?",
+      "What is the real working capacity of the Event Center, and how many rooms will hotels commit to groups by month?",
+      "Which DMC, AV and venue partners meet planner standards, with references?",
+      "How do Ixtapa's resort scale and Zihuatanejo's Pueblo Mágico character combine into one program?",
+    ],
+    evidence: "Evidence we need: working capacity of the Event Center, commitable room nights by hotel and month, and DMC, AV and venue references.",
+    now: "Starting point: midweek groups of 100 to 300, plus boutique retreats and boards in the luxury tier.",
+  },
+  {
+    n: 3, name: "Story",
+    q: "What is Ixtapa-Zihuatanejo's unique and compelling business events narrative that connects the Customer to the Product?",
+    why: "The destination is known as a leisure resort, and the consumer site offers planners no business events content. A credible story has to rest on proof and address access and safety directly.",
+    ask: [
+      "What can we claim that Puerto Vallarta, Cancún or Huatulco cannot?",
+      "What proof stands behind each claim: case studies, repeat groups, planner testimonials?",
+      "How does the story address air access and safety with evidence rather than reassurance?",
+      "Who tells it: hotel general managers, local ambassadors, past clients?",
+    ],
+    evidence: "Evidence we need: visitor survey data with both quantitative measures (satisfaction, intent to return, likelihood to recommend) and qualitative comments on what visitors value, plus planner testimonials, repeat-group records, case studies of past events and a priced comparison against a small competitor set.",
+    now: "Starting point: \"One trip. Two paradises.\" A focused Pacific-coast experience pairing resort capability with a distinctive coastal town.",
+  },
+  {
+    n: 4, name: "Leadership",
+    q: "What is the accountable leadership structure, and what resources are required to deliver the Ixtapa-Zihuatanejo business events initiative?",
+    why: "No owner, goal or meetings budget has been named. The US$3.1M current budget has no business-events line, and moving money needs a decision by the trust committee.",
+    ask: [
+      "Who owns business events, and who holds them accountable for results?",
+      "What budget line and multi-year authority will the trust committee commit?",
+      "How will large-group bids be shared across hotels, and who coordinates them?",
+      "Which data will be collected and reported: leads, RFPs, definites and lost business?",
+      "What does success look like in 12 months?",
+    ],
+    evidence: "Evidence we need: the budget split, current decision rights on the trust committee, and a one-page baseline within 60 days.",
+    now: "Estimate: US$0.3 to 0.7M a year for a meetings initiative including CRM, from the same pot as leisure promotion.",
+  },
+];
+
+function Elements() {
+  return html`<section class="elements" id="elements" aria-labelledby="elements-h">
+    <div><div class="eyebrow">For the advisors, the CVB and the stakeholder community</div><h2 id="elements-h">Elements for CAS to Address</h2></div>
+    <p class="intro">Four questions frame the summit conversations. The goal for each is a working answer, an owner to take it forward, and the evidence it still needs. They build in order: the customer defines the product, the story connects the two, and leadership makes it happen.</p>
+    <div class="el-grid">
+      ${ELEMENTS.map(e => html`<article class="el" key=${e.name} id=${"el-" + e.name.toLowerCase()}>
+        <div class="el-top"><span class="n">${e.n}</span><h3>${e.name}</h3></div>
+        <p class="q">${e.q}</p>
+        <p>${e.why}</p>
+        <span class="k">Questions for the community</span>
+        <ul>${e.ask.map(a => html`<li key=${a}>${a}</li>`)}</ul>
+        <p class="now">${e.now}</p>
+        <p class="ev">${e.evidence}</p>
+      </article>`)}
+    </div>
+  </section>`;
+}
+
+function App() {
+  return html`<main class="wrap">
+    <header>
+      <div class="eyebrow">Pre-CAS review · International business events readiness</div>
+      <h1>Ixtapa-Zihuatanejo Discovery Preparation</h1>
+      <div class="meta"><span>PCMA Customer Advisory Summit, 17–20 Nov 2026</span><span>Desk review, 30 Oct 2026</span><span>B Mac, PCMA advisor</span></div>
+    </header>
+
+    <aside class="callout" aria-label="Evidence and limits">
+      <b>Evidence and limits</b>
+      <p>This is a desk review. We have requested key destination travel and infrastructure analytics to inform the discovery process. Until they arrive, the destination has shared no data, venue figures are self-reported and uninspected, and flight frequencies come from route directories rather than airline confirmation.</p>
+      <p>The target segments, the CVB budget, the cost of a meetings function and the seat-load estimates are judgments or hypotheses and stay directional until the destination's own data says otherwise.</p>
+    </aside>
+
+    <${Board} />
+
+    <section class="blocks" aria-label="The four blocks">
+      ${BLOCKS.map(b => html`<${Card} key=${b.id} b=${b} />`)}
+    </section>
+
+
+
+    <${Elements} />
+
+    <section class="split" aria-label="Where to play and the ask">
+      <div class="panel">
+        <div class="eyebrow">Where to play</div>
+        <h2>Testable now</h2>
+        <ul class="go">
+          <li>Mexican corporate and incentive groups of 100 to 300, midweek</li>
+          <li>Canadian groups, December to March, split across flights</li>
+          <li>Boutique retreats and boards in the luxury tier</li>
+        </ul>
+        <h2 style=${{ marginTop: "8px" }}>Not yet</h2>
+        <ul class="no">
+          <li>International-majority associations</li>
+          <li>Events above 300 without multi-hotel blocks</li>
+          <li>800 delegates or more, which would need charters</li>
+          <li>Buyers who cannot clear a travel-risk policy for Guerrero</li>
+        </ul>
+      </div>
+      <div class="panel ask">
+        <div class="eyebrow">The ask</div>
+        <h2>Owner, budget, authority, data</h2>
+        <ol>
+          <li>A named owner for business events</li>
+          <li>A committed budget line, separate from leisure promotion</li>
+          <li>A multi-year authority from the trust committee</li>
+          <li>The destination's own lead, RFP and lost-business data, which is the proof clients ask for</li>
+        </ol>
+        <p class="muted">Not a bigger campaign. Start small, prove it with Mexican and Canadian groups, then decide on international.</p>
+      </div>
+    </section>
+
+    <footer class="sources">
+      <span>Summarized from the advisor's full Pre-CAS Review, available on request. The air figures are charted in the <a href="06-Air-Access-Analysis.html">Air Access Analysis</a> and the segment sizing in the <a href="02-Segment-Fit-Working-View.html">Segment Fit working view</a>.</span>
+      <span>Passenger volumes from OMA operator filings; flight frequencies and carriers from route directories and Wikipedia (unconfirmed); advisory and perception data from official and press sources read through excerpts.</span>
+    </footer>
+  </main>`;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(html`<${App} />`);
+</script>
