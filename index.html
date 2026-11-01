@@ -8,11 +8,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Layout: master landing page; hosts' question as thesis, Pre-CAS scorecard, readiness approach card, four numbered analysis cards */
+/* Layout: master landing page; hosts' question as thesis, Pre-CAS scorecard, readiness approach card with four detail modals, four numbered analysis cards */
 :root {
   --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
   --accent: #0d6a75; --accent-soft: #dcecee;
-  --crit: #b13e35; --warn: #b5741c; --part: #8f8318; --ok: #2f7d4f; --empty: #d9e2e4;
+  --scrim: rgba(10, 24, 28, 0.55); --crit: #b13e35; --warn: #b5741c; --part: #8f8318; --ok: #2f7d4f; --empty: #d9e2e4;
   --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
   --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -21,13 +21,13 @@
   :root:not([data-theme="light"]) {
     --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
     --accent: #55bac6; --accent-soft: #17343a; color-scheme: dark;
-    --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #2a3d43;
+    --scrim: rgba(0, 0, 0, 0.7); --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #2a3d43;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
   --accent: #55bac6; --accent-soft: #17343a; color-scheme: dark;
-    --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #2a3d43;
+    --scrim: rgba(0, 0, 0, 0.7); --crit: #e17a70; --warn: #e2a54d; --part: #cfc05a; --ok: #6cc28e; --empty: #2a3d43;
 }
 html, body { margin: 0; }
 *, *::before, *::after { box-sizing: border-box; }
@@ -93,6 +93,46 @@ header { display: grid; gap: 18px; }
 .el .t { font-family: var(--display); font-stretch: 85%; font-weight: 750; font-size: 1.3rem; line-height: 1.1; }
 .el .s { font-size: 0.92rem; color: var(--muted); }
 .el:hover .t { color: var(--accent); }
+
+
+/* modal */
+body.locked { overflow: hidden; }
+.el { cursor: pointer; }
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 50; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.modal { background: var(--surface); color: var(--ink); border-radius: 18px; border: 1px solid var(--line); width: min(860px, 100%); max-height: 100%; overflow-y: auto; display: grid; gap: 20px; padding: 30px; box-shadow: 0 24px 60px rgba(0,0,0,0.25); }
+.m-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: start; }
+.m-head .num { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: 3.6rem; line-height: 0.85; color: var(--accent); }
+.m-head h3 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); font-weight: 800; }
+.m-head .sub { color: var(--muted); font-size: 1rem; margin-top: 6px; }
+.close { font: inherit; font-size: 1.5rem; line-height: 1; width: 44px; height: 44px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+.close:hover { border-color: var(--accent); color: var(--accent); }
+.m-q { font-family: var(--display); font-stretch: 85%; font-weight: 600; font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.25; color: var(--accent); }
+.m-why { font-size: 1.02rem; max-width: 70ch; }
+.m-k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.m-block { display: grid; gap: 10px; }
+.m-asks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.m-asks li { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--bg); display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 10px; font-size: 0.98rem; }
+.m-asks .i { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); padding-top: 2px; }
+.m-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.m-fact { border-top: 2px solid var(--ink); padding-top: 10px; display: grid; gap: 6px; align-content: start; }
+.m-fact p { font-size: 0.98rem; }
+.m-fact.ev { border-top-color: var(--accent); }
+.m-foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
+.m-foot .pos { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+.m-foot .full { font-size: 0.92rem; color: var(--accent); }
+.m-nav { display: flex; gap: 8px; }
+.m-nav button { font: inherit; font-size: 0.92rem; font-weight: 600; color: var(--accent); background: none; border: 1.5px solid var(--accent); border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+.m-nav button:hover { background: var(--accent-soft); }
+.m-nav button:disabled { opacity: 0.35; cursor: default; background: none; }
+@media (max-width: 700px) {
+  .m-asks, .m-pair { grid-template-columns: 1fr; }
+  .modal { padding: 20px; }
+  .m-head .num { font-size: 2.6rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .modal { animation: rise .18s ease-out; }
+  @keyframes rise { from { transform: translateY(10px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+}
 
 footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
 
@@ -161,7 +201,7 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
   </section>
 
   <section class="approach" aria-labelledby="approach-h">
-    <div style="display:grid;gap:6px"><div class="eyebrow">Elements for CAS to address</div><h2 id="approach-h">Readiness Approach</h2></div>
+    <div class="sec-head"><div style="display:grid;gap:6px"><div class="eyebrow">Elements for CAS to address</div><h2 id="approach-h">Readiness Approach</h2></div><span class="hint">Select a box for details</span></div>
     <ol class="els">
       <li><a class="el" href="05-Discovery-Preparation-Summary.html#el-customer"><span class="n" aria-hidden="true">1</span><span class="t">Customer</span><span class="s">Who we target, and the need we meet for them</span></a></li>
       <li><a class="el" href="05-Discovery-Preparation-Summary.html#el-product"><span class="n" aria-hidden="true">2</span><span class="t">Product</span><span class="s">What we can deliver, remarkably and consistently</span></a></li>
@@ -204,5 +244,145 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
     <span>A desk review prepared before the summit. Figures are as of late October 2026: passenger data from OMA operator filings, venue capacities self-reported by hotels, and flight frequencies from route directories. Segment sizes and economics are hypotheses until the destination's own data arrives.</span>
   </footer>
 </main>
+<div id="modal-root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+/* Readiness Approach modals. Content mirrors "Elements for CAS to Address" in 05-Discovery-Preparation-Summary.html; keep the two in step. */
+(function () {
+  if (!window.React || !window.ReactDOM || !window.htm) return; // links fall back to page 05
+  const { useEffect, useRef, useState } = React;
+  const html = htm.bind(React.createElement);
+
+  const ELEMENTS = [
+    {
+      id: "customer", name: "Customer", sub: "Who we target, and the need we meet for them",
+      q: "Who is the targeted business events customer, and what need does the Ixtapa-Zihuatanejo product fulfil for them?",
+      why: "The best customers are those who can reach the destination easily and approve travel to it. Air and advisory realities narrow the field before marketing begins.",
+      ask: [
+        "Which named accounts have booked in the last 24 months, and why did they choose us?",
+        "What need do we meet better than anyone: focus, privacy, reward, value or something else?",
+        "Which segments are we choosing not to pursue now, and why?",
+        "What does our lead and lost-business record say about who we win and lose?",
+      ],
+      now: "Mexican corporate and incentive groups, then Canadian groups December to March. U.S. buyers must clear a travel-risk policy; international associations come later.",
+      evidence: "Visitor arrivals by source market, group room nights by source market, the accounts booked in the last 24 months, and the lead and lost-business log with lost reasons.",
+    },
+    {
+      id: "product", name: "Product", sub: "What we can deliver, remarkably and consistently",
+      q: "What is the ideal business events product and experience the community can remarkably and consistently deliver?",
+      why: "Planners buy what a destination delivers every time, not what it can stage at its best. Today that is one Event Center, rooms not yet committed to groups, and onsite services that rest on marketing claims.",
+      ask: [
+        "Which program can we deliver flawlessly every time, midweek and outside peak weekends?",
+        "What is the real working capacity of the Event Center, and how many rooms will hotels commit to groups by month?",
+        "Which DMC, AV and venue partners meet planner standards, with references?",
+        "How do Ixtapa's resort scale and Zihuatanejo's Pueblo Mágico character combine into one program?",
+      ],
+      now: "Midweek groups of 100 to 300, plus boutique retreats and boards in the luxury tier.",
+      evidence: "Working capacity of the Event Center, commitable room nights by hotel and month, and DMC, AV and venue references.",
+    },
+    {
+      id: "story", name: "Story", sub: "The narrative that connects customer to product",
+      q: "What is Ixtapa-Zihuatanejo's unique and compelling business events narrative that connects the Customer to the Product?",
+      why: "The destination is known as a leisure resort, and the consumer site offers planners no business events content. A credible story has to rest on proof and address access and safety directly.",
+      ask: [
+        "What can we claim that Puerto Vallarta, Cancún or Huatulco cannot?",
+        "What proof stands behind each claim: case studies, repeat groups, planner testimonials?",
+        "How does the story address air access and safety with evidence rather than reassurance?",
+        "Who tells it: hotel general managers, local ambassadors, past clients?",
+      ],
+      now: "“One trip. Two paradises.” A focused Pacific-coast experience pairing resort capability with a distinctive coastal town.",
+      evidence: "Visitor survey data with both quantitative measures (satisfaction, intent to return, likelihood to recommend) and qualitative comments on what visitors value, plus planner testimonials, repeat-group records, case studies of past events and a priced comparison against a small competitor set.",
+    },
+    {
+      id: "leadership", name: "Leadership", sub: "Who owns it, and with what resources",
+      q: "What is the accountable leadership structure, and what resources are required to deliver the Ixtapa-Zihuatanejo business events initiative?",
+      why: "No owner, goal or meetings budget has been named. The US$3.1M current budget has no business-events line, and moving money needs a decision by the trust committee.",
+      ask: [
+        "Who owns business events, and who holds them accountable for results?",
+        "What budget line and multi-year authority will the trust committee commit?",
+        "How will large-group bids be shared across hotels, and who coordinates them?",
+        "Which data will be collected and reported: leads, RFPs, definites and lost business?",
+        "What does success look like in 12 months?",
+      ],
+      nowLabel: "Estimate",
+      now: "US$0.3 to 0.7M a year for a meetings initiative including CRM, from the same pot as leisure promotion.",
+      evidence: "The budget split, current decision rights on the trust committee, and a one-page baseline within 60 days.",
+    },
+  ];
+
+  function Modal({ index, onClose, onGo }) {
+    const e = ELEMENTS[index];
+    const closeRef = useRef(null), boxRef = useRef(null);
+    useEffect(() => {
+      document.body.classList.add("locked");
+      closeRef.current && closeRef.current.focus();
+      if (boxRef.current) boxRef.current.scrollTop = 0;
+      const onKey = ev => {
+        if (ev.key === "Escape") onClose();
+        if (ev.key === "ArrowRight" && index < ELEMENTS.length - 1) onGo(index + 1);
+        if (ev.key === "ArrowLeft" && index > 0) onGo(index - 1);
+        if (ev.key === "Tab" && boxRef.current) {
+          const f = boxRef.current.querySelectorAll("button:not([disabled]), a[href]");
+          if (!f.length) return;
+          const first = f[0], last = f[f.length - 1];
+          if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+          else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+        }
+      };
+      document.addEventListener("keydown", onKey);
+      return () => { document.removeEventListener("keydown", onKey); document.body.classList.remove("locked"); };
+    }, [index]);
+    return html`<div class="scrim" onClick=${ev => { if (ev.target === ev.currentTarget) onClose(); }}>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" ref=${boxRef}>
+        <div class="m-head">
+          <span class="num" aria-hidden="true">${index + 1}</span>
+          <div><h3 id="m-title">${e.name}</h3><p class="sub">${e.sub}</p></div>
+          <button class="close" type="button" aria-label="Close details" ref=${closeRef} onClick=${onClose}>×</button>
+        </div>
+        <p class="m-q">${e.q}</p>
+        <p class="m-why">${e.why}</p>
+        <div class="m-block">
+          <span class="m-k">Questions for the community</span>
+          <ol class="m-asks">${e.ask.map((a, i) => html`<li key=${i}><span class="i">${String(i + 1).padStart(2, "0")}</span><span>${a}</span></li>`)}</ol>
+        </div>
+        <div class="m-pair">
+          <div class="m-fact"><span class="m-k">${e.nowLabel || "Starting point"}</span><p>${e.now}</p></div>
+          <div class="m-fact ev"><span class="m-k">Evidence we need</span><p>${e.evidence}</p></div>
+        </div>
+        <div class="m-foot">
+          <span class="pos">Element ${index + 1} of ${ELEMENTS.length} · <a class="full" href=${"05-Discovery-Preparation-Summary.html#el-" + e.id}>In the readiness review →</a></span>
+          <div class="m-nav">
+            <button type="button" disabled=${index === 0} onClick=${() => onGo(index - 1)}>← Previous</button>
+            <button type="button" disabled=${index === ELEMENTS.length - 1} onClick=${() => onGo(index + 1)}>Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  let setOpenExt = null, lastBox = null;
+  function App() {
+    const [open, setOpen] = useState(null);
+    setOpenExt = setOpen;
+    const close = () => { setOpen(null); setTimeout(() => lastBox && lastBox.focus(), 0); };
+    return open === null ? null : html`<${Modal} index=${open} onClose=${close} onGo=${setOpen} />`;
+  }
+  ReactDOM.createRoot(document.getElementById("modal-root")).render(html`<${App} />`);
+
+  document.querySelectorAll(".approach a.el").forEach(a => {
+    const i = ELEMENTS.findIndex(e => a.getAttribute("href").endsWith("#el-" + e.id));
+    if (i < 0) return;
+    a.setAttribute("role", "button");
+    a.setAttribute("aria-haspopup", "dialog");
+    a.addEventListener("click", ev => {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return; // let new-tab clicks follow the link
+      ev.preventDefault(); lastBox = a; setOpenExt && setOpenExt(i);
+    });
+  });
+})();
+</script>
 </body>
 </html>
