@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Layout: master landing page; hosts' question as thesis, Pre-CAS scorecard, readiness approach card with four detail modals, four numbered analysis cards */
+/* Layout: master landing page; hosts' question as thesis, Pre-CAS scorecard, readiness approach card with four detail modals */
 :root {
   --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
   --accent: #0d6a75; --accent-soft: #dcecee;
@@ -60,29 +60,11 @@ header { display: grid; gap: 18px; }
 .row .num { font-family: var(--mono); font-size: 1.1rem; color: var(--muted); }
 .row .name { font-family: var(--display); font-stretch: 85%; font-weight: 700; font-size: 1.08rem; }
 .row .binds { font-size: 0.92rem; color: var(--muted); }
-.row a { text-decoration: none; }
-.row a:hover .name, .row a:focus-visible .name { color: var(--accent); }
 .meter { display: grid; gap: 6px; }
 .bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; max-width: 150px; }
 .bars i { height: 8px; border-radius: 2px; background: var(--empty); }
 .chip { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; }
 .board .note { color: var(--muted); font-size: 0.95rem; }
-.board .note a { color: var(--accent); }
-
-/* cards */
-.work { display: grid; gap: 16px; }
-.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.card { height: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto 1fr auto; gap: 10px 18px; text-decoration: none; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; transition: border-color .15s; }
-.card:hover { border-color: var(--accent); }
-.card .num { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: 3.6rem; line-height: 0.85; color: var(--accent); grid-row: span 3; }
-.card .top { display: grid; gap: 6px; }
-.card h3 { font-size: clamp(1.3rem, 2.6vw, 1.6rem); font-weight: 750; }
-.card p { font-size: 0.98rem; color: var(--muted); }
-.card .foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding-top: 4px; }
-.card .tags { display: flex; flex-wrap: wrap; gap: 6px 12px; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-.card:hover .open { background: var(--accent-soft); }
-
-.open { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 999px; padding: 6px 12px; white-space: nowrap; justify-self: start; }
 
 /* readiness approach */
 .approach { background: var(--surface); border: 2px solid var(--accent); border-radius: 16px; padding: 26px 28px; display: grid; gap: 18px; }
@@ -97,7 +79,7 @@ header { display: grid; gap: 18px; }
 
 /* modal */
 body.locked { overflow: hidden; }
-.el { cursor: pointer; }
+.el { cursor: pointer; width: 100%; font: inherit; color: inherit; text-align: left; }
 .scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 50; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
 .modal { background: var(--surface); color: var(--ink); border-radius: 18px; border: 1px solid var(--line); width: min(860px, 100%); max-height: 100%; overflow-y: auto; display: grid; gap: 20px; padding: 30px; box-shadow: 0 24px 60px rgba(0,0,0,0.25); }
 .m-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: start; }
@@ -119,7 +101,6 @@ body.locked { overflow: hidden; }
 .m-fact.ev { border-top-color: var(--accent); }
 .m-foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
 .m-foot .pos { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
-.m-foot .full { font-size: 0.92rem; color: var(--accent); }
 .m-nav { display: flex; gap: 8px; }
 .m-nav button { font: inherit; font-size: 0.92rem; font-weight: 600; color: var(--accent); background: none; border: 1.5px solid var(--accent); border-radius: 8px; padding: 7px 14px; cursor: pointer; }
 .m-nav button:hover { background: var(--accent-soft); }
@@ -142,13 +123,10 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
 }
 @media (max-width: 860px) {
   .els { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .cards { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .wrap { padding-block: 28px 48px; gap: 40px; }
   .approach { padding: 20px; }
-  .card { padding: 20px; gap: 8px 14px; }
-  .card .num { font-size: 2.8rem; }
   .els { grid-template-columns: 1fr; }
 }
 </style>
@@ -158,7 +136,7 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
     <div class="eyebrow">PCMA Customer Advisory Summit · Ixtapa-Zihuatanejo, Guerrero · 17–20 Nov 2026</div>
     <h1>Ixtapa-Zihuatanejo CAS: Advisor Work</h1>
     <p class="thesis"><small>The hosts' question</small>Which meetings and events can Ixtapa-Zihuatanejo realistically win now, and what must change to win them?</p>
-    <div class="meta"><span>Bruce MacMillan, PCMA advisor</span><span>Updated 1 Nov 2026</span><span>5 pages</span></div>
+    <div class="meta"><span>Bruce MacMillan, PCMA advisor</span><span>Updated 1 Nov 2026</span></div>
   </header>
 
   <section class="board" aria-labelledby="glance">
@@ -174,69 +152,39 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
     <div class="rows">
       <div class="row">
         <span class="num">01</span>
-        <a href="05-Discovery-Preparation-Summary.html#access"><span class="name">Participant access</span></a>
+        <span class="name">Participant access</span>
         <div class="meter" aria-label="Rating: Deal-breaker for international"><div class="bars"><i style="background:var(--crit)"></i><i></i><i></i><i></i></div><span class="chip" style="color:var(--crit)">Deal-breaker for international</span></div>
         <span class="binds">Winter-only, narrow-body air that is shrinking; each big gateway rests on one airline</span>
       </div>
       <div class="row">
         <span class="num">02</span>
-        <a href="05-Discovery-Preparation-Summary.html#infrastructure"><span class="name">Business event infrastructure</span></a>
+        <span class="name">Business event infrastructure</span>
         <div class="meter" aria-label="Rating: Partial and unproven"><div class="bars"><i style="background:var(--part)"></i><i style="background:var(--part)"></i><i style="background:var(--part)"></i><i></i></div><span class="chip" style="color:var(--part)">Partial and unproven</span></div>
         <span class="binds">One large Event Center; commitable rooms unknown; onsite services not evidenced</span>
       </div>
       <div class="row">
         <span class="num">03</span>
-        <a href="05-Discovery-Preparation-Summary.html#marketplace"><span class="name">Marketplace awareness and competitive set</span></a>
+        <span class="name">Marketplace awareness and competitive set</span>
         <div class="meter" aria-label="Rating: Weak for international"><div class="bars"><i style="background:var(--warn)"></i><i style="background:var(--warn)"></i><i></i><i></i></div><span class="chip" style="color:var(--warn)">Weak for international</span></div>
         <span class="binds">Known as a leisure resort; U.S. advisory text and buyer risk approval</span>
       </div>
       <div class="row">
         <span class="num">04</span>
-        <a href="05-Discovery-Preparation-Summary.html#resources"><span class="name">Business development resources</span></a>
+        <span class="name">Business development resources</span>
         <div class="meter" aria-label="Rating: Not ready"><div class="bars"><i style="background:var(--crit)"></i><i></i><i></i><i></i></div><span class="chip" style="color:var(--crit)">Not ready</span></div>
         <span class="binds">Leisure-promotion team, US$3.1M current budget, no meetings line, no data</span>
       </div>
     </div>
-    <p class="note">Access is the hardest limit for international events, perception is the hardest gate for buyers, and the first two blocks cannot be judged properly until the destination's own data exists. <a href="05-Discovery-Preparation-Summary.html">Full scorecard and evidence →</a></p>
+    <p class="note">Access is the hardest limit for international events, perception is the hardest gate for buyers, and the first two blocks cannot be judged properly until the destination's own data exists.</p>
   </section>
 
   <section class="approach" aria-labelledby="approach-h">
     <div class="sec-head"><div style="display:grid;gap:6px"><div class="eyebrow">Elements for CAS to address</div><h2 id="approach-h">Readiness Approach</h2></div><span class="hint">Select a box for details</span></div>
     <ol class="els">
-      <li><a class="el" href="05-Discovery-Preparation-Summary.html#el-customer"><span class="n" aria-hidden="true">1</span><span class="t">Customer</span><span class="s">Who we target, and the need we meet for them</span></a></li>
-      <li><a class="el" href="05-Discovery-Preparation-Summary.html#el-product"><span class="n" aria-hidden="true">2</span><span class="t">Product</span><span class="s">What we can deliver, remarkably and consistently</span></a></li>
-      <li><a class="el" href="05-Discovery-Preparation-Summary.html#el-story"><span class="n" aria-hidden="true">3</span><span class="t">Story</span><span class="s">The narrative that connects customer to product</span></a></li>
-      <li><a class="el" href="05-Discovery-Preparation-Summary.html#el-leadership"><span class="n" aria-hidden="true">4</span><span class="t">Leadership</span><span class="s">Who owns it, and with what resources</span></a></li>
-    </ol>
-  </section>
-
-  <section class="work" aria-labelledby="work-h">
-    <div class="sec-head"><h2 id="work-h">The analysis</h2><span class="hint">In reading order</span></div>
-    <ol class="cards">
-      <li><a class="card" href="05-Discovery-Preparation-Summary.html">
-        <span class="num" aria-hidden="true">1</span>
-        <span class="top"><span class="eyebrow">Readiness scorecard</span><h3>Discovery Preparation</h3></span>
-        <p>Four readiness blocks (access, event infrastructure, marketplace and business development resources), plus the four elements for the summit to address: customer, product, story and leadership.</p>
-        <span class="foot"><span class="tags"><span>30 Oct 2026</span><span>Interactive</span></span><span class="open">Open →</span></span>
-      </a></li>
-      <li><a class="card" href="06-Air-Access-Analysis.html">
-        <span class="num" aria-hidden="true">2</span>
-        <span class="top"><span class="eyebrow">Participant access</span><h3>Air Access Analysis</h3></span>
-        <p>Airport traffic to September 2026: record totals, all growth domestic, international shrinking at both ends of the season. Monthly charts, group-lift table and the winter gateway board.</p>
-        <span class="foot"><span class="tags"><span>30 Oct 2026</span><span>Charts</span></span><span class="open">Open →</span></span>
-      </a></li>
-      <li><a class="card" href="02-Segment-Fit-Working-View.html">
-        <span class="num" aria-hidden="true">3</span>
-        <span class="top"><span class="eyebrow">Segment fit</span><h3>Realistic Segment Fit</h3></span>
-        <p>Which event types, sizes and seasons fit now, each with its evidence status and the conditions to make it viable. Includes the rooms and arrivals sizing check.</p>
-        <span class="foot"><span class="tags"><span>29 Oct 2026</span><span>Working paper</span></span><span class="open">Open →</span></span>
-      </a></li>
-      <li><a class="card" href="03-Strategic-Reality-Check.html">
-        <span class="num" aria-hidden="true">4</span>
-        <span class="top"><span class="eyebrow">Economics</span><h3>Strategic Reality Check</h3></span>
-        <p>Whether business events pay, not only which ones to win: a public-data baseline, candidate reasons why, the incremental economics and a staged path from baseline to pilot.</p>
-        <span class="foot"><span class="tags"><span>29 Oct 2026</span><span>Working paper</span></span><span class="open">Open →</span></span>
-      </a></li>
+      <li><button class="el" type="button" data-el="customer" aria-haspopup="dialog"><span class="n" aria-hidden="true">1</span><span class="t">Customer</span><span class="s">Who we target, and the need we meet for them</span></button></li>
+      <li><button class="el" type="button" data-el="product" aria-haspopup="dialog"><span class="n" aria-hidden="true">2</span><span class="t">Product</span><span class="s">What we can deliver, remarkably and consistently</span></button></li>
+      <li><button class="el" type="button" data-el="story" aria-haspopup="dialog"><span class="n" aria-hidden="true">3</span><span class="t">Story</span><span class="s">The narrative that connects customer to product</span></button></li>
+      <li><button class="el" type="button" data-el="leadership" aria-haspopup="dialog"><span class="n" aria-hidden="true">4</span><span class="t">Leadership</span><span class="s">Who owns it, and with what resources</span></button></li>
     </ol>
   </section>
 
@@ -250,9 +198,9 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
 <script>
-/* Readiness Approach modals. Content mirrors "Elements for CAS to Address" in 05-Discovery-Preparation-Summary.html; keep the two in step. */
+/* Readiness Approach modals. Content mirrors "Elements for CAS to Address" on the Discovery Preparation page; keep the two in step. */
 (function () {
-  if (!window.React || !window.ReactDOM || !window.htm) return; // links fall back to page 05
+  if (!window.React || !window.ReactDOM || !window.htm) return;
   const { useEffect, useRef, useState } = React;
   const html = htm.bind(React.createElement);
 
@@ -325,7 +273,7 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
         if (ev.key === "ArrowRight" && index < ELEMENTS.length - 1) onGo(index + 1);
         if (ev.key === "ArrowLeft" && index > 0) onGo(index - 1);
         if (ev.key === "Tab" && boxRef.current) {
-          const f = boxRef.current.querySelectorAll("button:not([disabled]), a[href]");
+          const f = boxRef.current.querySelectorAll("button:not([disabled])");
           if (!f.length) return;
           const first = f[0], last = f[f.length - 1];
           if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
@@ -353,7 +301,7 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
           <div class="m-fact ev"><span class="m-k">Evidence we need</span><p>${e.evidence}</p></div>
         </div>
         <div class="m-foot">
-          <span class="pos">Element ${index + 1} of ${ELEMENTS.length} · <a class="full" href=${"05-Discovery-Preparation-Summary.html#el-" + e.id}>In the readiness review →</a></span>
+          <span class="pos">Element ${index + 1} of ${ELEMENTS.length}</span>
           <div class="m-nav">
             <button type="button" disabled=${index === 0} onClick=${() => onGo(index - 1)}>← Previous</button>
             <button type="button" disabled=${index === ELEMENTS.length - 1} onClick=${() => onGo(index + 1)}>Next →</button>
@@ -372,15 +320,10 @@ footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--li
   }
   ReactDOM.createRoot(document.getElementById("modal-root")).render(html`<${App} />`);
 
-  document.querySelectorAll(".approach a.el").forEach(a => {
-    const i = ELEMENTS.findIndex(e => a.getAttribute("href").endsWith("#el-" + e.id));
+  document.querySelectorAll(".approach .el").forEach(btn => {
+    const i = ELEMENTS.findIndex(e => e.id === btn.dataset.el);
     if (i < 0) return;
-    a.setAttribute("role", "button");
-    a.setAttribute("aria-haspopup", "dialog");
-    a.addEventListener("click", ev => {
-      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return; // let new-tab clicks follow the link
-      ev.preventDefault(); lastBox = a; setOpenExt && setOpenExt(i);
-    });
+    btn.addEventListener("click", () => { lastBox = btn; setOpenExt && setOpenExt(i); });
   });
 })();
 </script>
