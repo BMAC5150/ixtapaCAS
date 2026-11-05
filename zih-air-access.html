@@ -121,8 +121,8 @@ const SEAT_M = ["Nov","Dec","Jan","Feb","Mar","Apr"];
 const SEATS = { can: [3666,4983,5295,4896,5202,3816], usa: [5100,8302,10884,8707,10764,5436], mex: [29409,34914,32342,27148,29632,29131] };
 // Datatur: hotel guest arrivals (foreign / Mexican residents) and occupancy %. 2026 to August.
 const OCC = { 2024: [65.72,64.39,67.14,60.8,58.72,60.74,67.47,58.09,44.83,46.88,61.29,71.21], 2025: [68.91,65.07,60.95,66.15,65.27,55.46,64.61,63.13,44.15,51.86,64.11,69.05], 2026: [68.49,66.15,54.73,57.14,58.14,48.08,57.63,61.6] };
-const FX = { 2025: [15313,7374,10724,6584,10023,4802,11112,3744,2936,17883,10376,10839], 2026: [10348,8748,11180,8291,3885,5632,5797,15792] };
-const RS = { 2025: [123632,113562,99735,106915,106372,115164,135067,135227,87199,115432,135238,150292], 2026: [111803,109914,121765,109476,131653,107630,160193,138155] };
+const FX = { 2024: [13553,10639,12015,6497,4917,14254,7111,5277,4131,4349,9216,9714], 2025: [15313,7374,10724,6584,10023,4802,11112,3744,2936,17883,10376,10839], 2026: [10348,8748,11180,8291,3885,5632,5797,15792] };
+const RS = { 2024: [92800,78370,105431,101311,118643,91387,138575,126451,92009,102019,137653,206970], 2025: [123632,113562,99735,106915,106372,115164,135067,135227,87199,115432,135238,150292], 2026: [111803,109914,121765,109476,131653,107630,160193,138155] };
 // Estimated annual arrivals: half of OMA terminal passengers (both directions), 2014-2025.
 const ANNUAL = [[2014,254032],[2015,281050],[2016,278694],[2017,298951],[2018,283248],[2019,312593],[2020,158698],[2021,217088],[2022,296677],[2023,327196],[2024,337330],[2025,366808]];
 
@@ -239,6 +239,36 @@ function SeatsChart() {
   </svg></div>`;
 }
 
+/* ---------- combo: hotel guests (stacked columns) + occupancy (line) ---------- */
+function ComboChart() {
+  const pts = [];
+  [2024, 2025, 2026].forEach(yr => OCC[yr].forEach((o, i) => pts.push({ yr, m: MONTHS[i], fx: FX[yr][i], rs: RS[yr][i], o })));
+  const W = 980, H = 340, L = 54, R = 48, T = 20, B = 52, maxL = 240000, maxR = 80;
+  const n = pts.length, band = (W - L - R) / n, bw = band * 0.68;
+  const yl = v => T + (H - T - B) * (1 - v / maxL);
+  const yo = v => T + (H - T - B) * (1 - v / maxR);
+  const cx = k => L + k * band + band / 2;
+  const line = pts.map((p, k) => `${cx(k)},${yo(p.o)}`).join(" ");
+  return html`<div class="chart"><svg viewBox=${`0 0 ${W} ${H}`} style=${{ minWidth: "760px" }} role="img" aria-label="Monthly hotel guest arrivals by domestic and international, with hotel occupancy, January 2024 to August 2026">
+    ${[0, 1, 2, 3, 4].map(k => html`<g key=${k}>
+      <line x1=${L} x2=${W - R} y1=${yl(k * 60000)} y2=${yl(k * 60000)} stroke="var(--line)" />
+      <text x=${L - 8} y=${yl(k * 60000) + 4} text-anchor="end" font-size="11" fill="var(--muted)">${k * 60}k</text>
+      <text x=${W - R + 8} y=${yl(k * 60000) + 4} font-size="11" fill="var(--warn)">${k * 20}%</text></g>`)}
+    ${[12, 24].map(k => html`<line key=${k} x1=${L + k * band} x2=${L + k * band} y1=${T} y2=${H - B + 34} stroke="var(--grey2)" stroke-dasharray="3 3" />`)}
+    ${pts.map((p, k) => html`<g key=${k}>
+      <rect x=${cx(k) - bw / 2} y=${yl(p.rs)} width=${bw} height=${yl(0) - yl(p.rs)} fill="var(--grey)" />
+      <rect x=${cx(k) - bw / 2} y=${yl(p.rs + p.fx)} width=${bw} height=${yl(0) - yl(p.fx)} fill="var(--accent)" />
+      <rect x=${cx(k) - band / 2} y=${T} width=${band} height=${H - T - B} fill="transparent"><title>${p.m} ${p.yr}: ${fmt(p.rs + p.fx)} hotel guests (${fmt(p.rs)} domestic, ${fmt(p.fx)} international) · occupancy ${p.o}%</title></rect>
+      <text x=${cx(k)} y=${H - B + 16} text-anchor="middle" font-size="10" fill="var(--muted)">${p.m[0]}</text>
+    </g>`)}
+    <polyline points=${line} fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linejoin="round" pointer-events="none" />
+    ${pts.map((p, k) => html`<circle key=${k} cx=${cx(k)} cy=${yo(p.o)} r="3" fill="var(--surface)" stroke="var(--warn)" stroke-width="2" pointer-events="none" />`)}
+    ${[[2024, 5.5], [2025, 17.5], [2026, 27.5]].map(([yr, k]) => html`<text key=${yr} x=${cx(k)} y=${H - B + 36} text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${yr}</text>`)}
+    <text x=${14} y=${T + (H - T - B) / 2} font-size="11" fill="var(--muted)" transform=${`rotate(-90 14 ${T + (H - T - B) / 2})`} text-anchor="middle">Hotel guests</text>
+    <text x=${W - 10} y=${T + (H - T - B) / 2} font-size="11" fill="var(--warn)" transform=${`rotate(90 ${W - 10} ${T + (H - T - B) / 2})`} text-anchor="middle">Occupancy</text>
+  </svg></div>`;
+}
+
 /* ---------- gateways (directory) ---------- */
 const GATEWAYS = [
   { g: "Los Angeles", wk: 6, nov: "~4", c: "Alaska", st: "yes", note: "Year-round" },
@@ -291,7 +321,7 @@ function App() {
 
   return html`<main class="wrap">
     <header>
-      <div class="eyebrow">Pre-CAS review · Block 1 · Participant access · Version 3</div>
+      <div class="eyebrow">Pre-CAS review · Block 1 · Participant access · Version 4</div>
       <h1>Ixtapa-Zihuatanejo Air Access Analysis</h1>
       <div class="meta"><span>Zihuatanejo International Airport (ZIH)</span><span>Updated 5 Nov 2026 for BMAC, PCMA advisor</span></div>
       <p class="lede">Arrivals are growing, and the growth is domestic. Canadian arrivals are up about 25% a year; U.S. arrivals are down about 10%. Winter international seats barely cover last winter's demand, so peak-season groups will need a seat block or a charter.</p>
@@ -317,7 +347,7 @@ function App() {
     </section>
 
     <${Panel} eyebrow="Long-run trend" title="Arrivals are above their 2019 and 2000 levels" tags=${["Derived", "Directory"]}
-      read="About 367,000 arrivals in 2025: 17% above 2019 and 6% above 2000. After 25 flat years, the recovery since 2021 has been domestic."
+      read="About 367,000 arrivals in 2025: 17% above 2019 and 6% above 2000. Arrivals were flat for two decades; growth since 2024 has come from domestic traffic."
       src="Half of OMA annual passengers (2014–2023 via Wikipedia; 2024–2025 from OMA). AFAC's commercial-only count for 2025 is 349,874.">
       <${AnnualChart} />
     <//>
@@ -332,23 +362,23 @@ function App() {
         <div class="mini"><h3>Domestic (Mexico)</h3><${Lines} data=${MEX} max=${30000} step=${15000} label="Monthly domestic arrivals, 2024 to 2026" /><span class="note up">Jan–Sep 2026: ${fmt(s9(MEX, 2026))} · ${sgn(mexChg)}</span></div>
       </div>
       <div class="tbl"><table>
-        <thead><tr><th>Arrivals</th><th class="num">Winter 2024–25</th><th class="num">Winter 2025–26</th><th class="num">Change</th><th class="num">May–Sep 2025</th><th class="num">May–Sep 2026</th><th class="num">Change</th></tr></thead>
+        <thead><tr><th>Arrivals</th><th class="num">Nov 2024–Apr 2025</th><th class="num">Nov 2025–Apr 2026</th><th class="num">Change</th><th class="num">May–Sep 2025</th><th class="num">May–Sep 2026</th><th class="num">Change</th></tr></thead>
         <tbody>${seasonRows.map(([n, a, b, c, d]) => html`<tr key=${n}><td><b>${n}</b></td><td class="num">${fmt(a)}</td><td class="num">${fmt(b)}</td><td class="num">${chg(a, b)}</td>
           <td class="num">${c === null ? "No flights" : fmt(c)}</td><td class="num">${d === null ? "No flights" : fmt(d)}</td><td class="num">${c === null ? "—" : chg(c, d)}</td></tr>`)}</tbody>
       </table></div>
-      <p class="read">Winter international arrivals held flat (+0.9%) because Canadian growth offset the U.S. decline. The losses are in U.S. summer traffic, the only international service from May to September.</p>
+      <p class="read">Winter international arrivals held flat (+0.9%) because Canadian growth offset the U.S. decline. U.S. arrivals fell in both seasons, most sharply from May to September (−15.3%), when the U.S. is the only international market.</p>
     <//>
 
     <${Panel} eyebrow="Traffic mix" title="International's share of arrivals keeps falling" tags=${["Verified", "Derived"]}
       extra=${html`<div class="legend"><span><i style=${{ background: "var(--grey)" }}></i>Domestic</span><span><i style=${{ background: "var(--accent)" }}></i>International</span></div>`}
-      read="Domestic arrivals grew 19% in 2025 and 10% in 2026. International fell about 3% each year, so its share dropped from 30% to 23%."
+      read="Domestic arrivals grew 19% in 2025 and 10% in 2026. International fell about 3% each year, so its share dropped from 30% in 2024 to 23% in January–September 2026."
       src="AFAC arrivals; 2026 is January–September.">
       <${MixChart} />
     <//>
 
     <${Panel} eyebrow="Seats, winter 2026–27" title="Winter international seats barely cover last winter's demand" tags=${["Verified", "Derived", "Hypothesis"]}
       extra=${html`<div class="legend"><span><i style=${{ background: "var(--accent-soft)", border: "1.5px solid var(--accent)" }}></i>Seats scheduled this winter</span><span><i style=${{ background: "var(--grey2)" }}></i>Arrivals, same month last winter</span><span>% = last winter's arrivals ÷ this winter's seats</span></div>`}
-      read="From December to February, last winter's arrivals exceed this winter's seats. Charter flights not listed in OAG may close the gap. Late March and April have spare seats. Domestic seats run about 25% above last winter's domestic arrivals."
+      read="From December to February, last winter's arrivals exceed this winter's seats. Charter flights not listed in OAG may close the gap. Late March and April have spare seats. Domestic seats run about 27% above last winter's domestic arrivals."
       src="OAG seats filed 1 Nov 2026; AFAC arrivals Nov 2025–Apr 2026. These ratios are not load factors, and airlines often add winter flights after 1 Nov.">
       <${SeatsChart} />
       <div class="tbl"><table>
@@ -360,22 +390,29 @@ function App() {
 
     <${Panel} eyebrow="Hotels" title="More hotel guests in 2026, but lower occupancy" tags=${["Verified", "Derived"]}
       extra=${html`<${YearLegend} />`}
-      read=${`Occupancy was 61.7% in 2025. In January–August 2026 it fell to ${occ8(2026).toFixed(1)}% from ${occ8(2025).toFixed(1)}%, even though hotel guests rose ${Math.round(pct(hotel8(2025), hotel8(2026)))}%. Ask the hotel association whether new rooms or shorter stays explain it. June, September and October have the lowest occupancy and almost no international flights, so they suit domestic events.`}
+      read=${`Occupancy was 61.7% in 2025. In January–August 2026 it fell to ${occ8(2026).toFixed(1)}% from ${occ8(2025).toFixed(1)}%, even though hotel guests rose ${pct(hotel8(2025), hotel8(2026)).toFixed(1)}%. Ask the hotel association whether new rooms or shorter stays explain it. September and October are the lowest months every year, and June has been weak in 2025 and 2026. All three have few international flights, so they suit domestic events.`}
       src="Datatur. The 2025 figure matches FONATUR's 61.7%, not the state's 65.5%.">
       <div class="two">
         <div class="mini"><h3>Monthly occupancy</h3><${Lines} data=${OCC} max=${80} step=${20} unit="%" label="Monthly hotel occupancy, 2024 to 2026" h=${220} /></div>
         <div class="kpis" style=${{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))", alignContent: "start" }}>
           <div class="kpi"><span class="v">61.7%</span><span class="l">occupancy, 2025</span><span class="s" style=${{ color: TAGS.Verified }}>Verified</span></div>
           <div class="kpi"><span class="v">${occ8(2026).toFixed(1)}%</span><span class="l">Jan–Aug 2026, down from ${occ8(2025).toFixed(1)}%</span><span class="s" style=${{ color: TAGS.Derived }}>Derived</span></div>
-          <div class="kpi"><span class="v">7%</span><span class="l">of 2025 hotel guests were foreign</span><span class="s" style=${{ color: TAGS.Derived }}>Derived</span></div>
-          <div class="kpi"><span class="v">44%</span><span class="l">September occupancy, 2024 and 2025</span><span class="s" style=${{ color: TAGS.Verified }}>Verified</span></div>
+          <div class="kpi"><span class="v">7%</span><span class="l">of 2025 hotel guests were international</span><span class="s" style=${{ color: TAGS.Derived }}>Derived</span></div>
+          <div class="kpi"><span class="v">44–45%</span><span class="l">September occupancy, 2024 and 2025</span><span class="s" style=${{ color: TAGS.Verified }}>Verified</span></div>
         </div>
       </div>
-      <div class="flag"><b>Reading the foreign-guest figures</b><span>In some months foreign hotel guests far outnumber international air arrivals (August 2026: 15,792 against 1,449), because many foreign guests fly in on domestic flights. International air arrivals therefore understate foreign visitors.</span></div>
+      <div class="flag"><b>Reading the international-guest figures</b><span>In some months international hotel guests far outnumber international air arrivals (August 2026: 15,792 against 1,449), because many arrive on domestic flights. International air arrivals therefore understate international visitors.</span></div>
+    <//>
+
+    <${Panel} eyebrow="Hotel demand by month" title="Hotel guests and occupancy, 2024 to 2026" tags=${["Verified", "Derived"]}
+      extra=${html`<div class="legend"><span><i style=${{ background: "var(--grey)" }}></i>Domestic guests (Mexican residents)</span><span><i style=${{ background: "var(--accent)" }}></i>International guests</span><span><i class="ln" style=${{ background: "var(--warn)", height: "3px" }}></i>Occupancy (right axis)</span></div>`}
+      read="Domestic guests make up about 93% of hotel guests and set the seasonal pattern. December is the peak for both guests and occupancy, and July is a second peak in guests. Occupancy is lowest in September, at about 44%. July 2026 had a record 165,990 guests but only 57.6% occupancy."
+      src="Datatur hotel guest arrivals and occupancy, January 2024 to August 2026. International guests include foreign visitors who arrived on domestic flights. Hover over or tap a column for monthly figures.">
+      <${ComboChart} />
     <//>
 
     <${Panel} eyebrow="Gateways, winter 2026–27" title="Ten gateways; only two near-daily, each on one airline" tags=${["Directory"]}
-      src="Status at 1 Nov 2026, from route directories, airline press and local reporting; not confirmed with airlines. OAG's January seats equal about 21 flights a week, fewer than the 29 listed here.">
+      src="Status at 1 Nov 2026, from route directories, airline press and local reporting; not confirmed with airlines. OAG's January seats equal about 21 flights a week at 170 seats a flight, fewer than the 29 listed here.">
       <${GatewayTable} />
     <//>
 
@@ -384,9 +421,9 @@ function App() {
       <div class="impl">
         <div><h3>"International" means Canada first</h3><p>Canadian arrivals are up about 25% a year, Calgary and Vancouver fly direct, and Canada's advisory exempts ZIH by air. Lead with Western Canadian incentive and corporate groups.</p></div>
         <div><h3>Peak-season groups need a seat plan</h3><p>December to February seats are already matched by last winter's demand. Groups in those months need a seat block or a charter.</p></div>
-        <div><h3>Late March and April are the shoulder opening</h3><p>Seats run about 30% above last year's arrivals in March and 75% above in April. November has no slack. Test this with the airlines.</p></div>
-        <div><h3>Domestic air is the strength</h3><p>Domestic arrivals grew 19% in 2025 and 10% in 2026, with seats to spare. Events drawing from Mexico work in every month.</p></div>
-        <div><h3>The low hotel months are domestic months</h3><p>June, September and October have the lowest occupancy and almost no international flights. Fill them with domestic meetings and keep international groups in winter.</p></div>
+        <div><h3>Late March and April are the shoulder opening</h3><p>Seats run about 30% above last year's arrivals in March and 75% above in April, and hotel occupancy in both months was below average in 2026. November has no slack. Test this with the airlines.</p></div>
+        <div><h3>Domestic air is the strength</h3><p>Domestic arrivals grew 19% in 2025 and 10% in 2026, with seats to spare. Air access supports events drawing from Mexico in every month.</p></div>
+        <div><h3>The low hotel months are domestic months</h3><p>June, September and October have the lowest occupancy and few international flights. Fill them with domestic meetings and keep international groups in winter.</p></div>
         <div><h3>Global associations are out for now</h3><p>Delegates from Europe, Latin America and Asia need two flights, the last on a narrow-body. The U.S. market is shrinking, and Canada flies only in winter.</p></div>
       </div>
     </section>
