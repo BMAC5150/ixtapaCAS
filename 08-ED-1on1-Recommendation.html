@@ -158,7 +158,7 @@ const ALLOC = [
   { nm: "Site visits", amt: 75, ds: "Fam trips and hosted inspections: the real conversion tool", op: 0.82 },
   { nm: "The story", amt: 50, ds: "Planner research, positioning, planner assets", op: 0.66, isNew: true },
   { nm: "Sales", amt: 50, ds: "A Bajío and Michoacán corporate sales mission, and one western Canada incentive mission (Vancouver, Calgary)", op: 0.52 },
-  { nm: "Data", amt: 40, ds: "CRM, lead / RFP / lost-business log, 60-day group baseline", op: 0.4 },
+  { nm: "Data", amt: 40, ds: "Intake form, lead / RFP / lost-business log, simple CRM, hotel group field, 60-day group baseline. Built first.", op: 0.4 },
   { nm: "Safety proof", amt: 30, ds: "Planner-grade safety and logistics pack for meetings buyers", op: 0.28 },
 ];
 const TOTAL = ALLOC.reduce((s, a) => s + a.amt, 0);
@@ -184,7 +184,51 @@ const TESTS = [
   "Flexes by segment: Mexican corporate, Canadian incentive, boards",
 ];
 
+const FIELDS = [
+  ["Every lead and RFP", "Date in, source, organization, segment, origin state or country, dates, attendees, peak rooms, room nights, space, budget"],
+  ["Where it went", "Hotels and DMCs it was sent to, by a neutral distribution rule, and each one's response"],
+  ["How it ended", "Status from lead to proposal, tentative, definite, lost or cancelled, with one lost reason from a fixed list: dates, rate, air, safety approval, space, competitor, cancelled"],
+  ["What actually happened", "For definites: attendees, room nights picked up, hotels used, month and weekday pattern"],
+  ["Hotel group pickup", "Each month, group versus individual room nights from hotel-association members: the one field they add to the origin data they already collect"],
+  ["Site visits and fams", "Who came, when, and what they booked or why they didn't"],
+];
+
 const RECS = [
+  {
+    title: "Build your own data before anything else",
+    sub: "The precondition for every other recommendation",
+    card: html`<p class="ask">Set up a simple, bureau-owned record of every lead, RFP, booking and loss within 90 days, starting with a spreadsheet, not a software purchase.</p>
+      <p class="why"><b>Why:</b> everything shared so far comes from third parties (Datatur, AFAC, OAG, the state, the hotel association, OMA). None of it describes the bureau's own business. Without its own data, nobody can sell, measure the sales cell or prove anything to a planner.</p>`,
+    detail: html`
+      <${Facts} items=${[
+        ["The finding", "The 3 Nov file and the CVB's statistics are a good leisure baseline, and all of it is third-party data. No lead, RFP, group, win or loss record has surfaced. If an informal log exists, this brings it into the open."],
+        ["Why it is critical", "Planners ask for proof, hotels will not co-fund a pipeline they cannot see, the trust committee needs a measure, and the cost-per-room-night bar in recommendation 6 cannot be calculated without it."],
+        ["What it costs", "Mostly staff time. It fits inside the US$40K data line: start in a shared spreadsheet or a free CRM tier, with bilingual definitions, and buy software only once the process works."],
+      ]} />
+      <div class="block">
+        <span class="k">The minimum record: six things to capture</span>
+        <ol class="topics">${FIELDS.map(([t, d], i) => html`<li class="topic" key=${t}><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${t}</span><span class="d">${d}</span></li>`)}</ol>
+      </div>
+      <div class="block">
+        <span class="k">The flow</span>
+        <ol class="steps-list">
+          <li>One front door: every inquiry, from any hotel, DMC, trade show or email, is logged by the bureau within one business day</li>
+          <li>The bureau distributes each lead to hotels by a published, neutral rule</li>
+          <li>Hotels and DMCs report their response and the outcome within an agreed number of days</li>
+          <li>Once a month, a 30-minute reconciliation with the hotel association adds group pickup and closes open leads</li>
+          <li>Every quarter, a one-page report to the trust committee: leads, conversion, room nights, lost value by reason, source markets, share in the low months</li>
+        </ol>
+      </div>
+      <div class="block">
+        <span class="k">First 90 days</span>
+        <ol class="steps-list">
+          <li>Days 1–30: name the owner, agree the definitions and lost-reason list, open the intake form and log</li>
+          <li>Days 31–60: back-fill the last 24 months of groups from hotels and DMCs. This becomes the group baseline</li>
+          <li>Days 61–90: first monthly report, and the hotel association adds the group field from January</li>
+        </ol>
+      </div>
+      <div class="quote"><span class="k">The line</span><p>“The data you've shared tells a planner about the destination. What they'll ask next is about your business: how many groups, from where, and why you win or lose. The cheapest asset you can build this year is your own record of every lead.”</p></div>`,
+  },
   {
     title: "Fund a sales cell from publicity",
     sub: "Reallocate, don't add",
@@ -340,7 +384,7 @@ function App() {
     <header>
       <div class="eyebrow">Private · 1:1 with the CVB Executive Director</div>
       <h1>Fund a Sales Cell, Not a Campaign</h1>
-      <p class="thesis">Take US$350K from publicity, fund a business-events cell for 24 months, and judge it on room nights, not impressions.</p>
+      <p class="thesis">Build the bureau's own data first. Then take US$350K from publicity, fund a business-events cell for 24 months, and judge it on room nights, not impressions.</p>
       <p class="meta">Personal recommendation card · Bruce MacMillan · Updated 10 Nov 2026 · Not for distribution</p>
     </header>
 
@@ -368,12 +412,13 @@ function App() {
         <span>Current budget <b>~US$3.1M</b> (inferred)</span>
         <span>Share reallocated <b>~11%</b></span>
         <span>Meetings line today <b>none</b></span>
+        <span>Bureau-owned business-events data today <b>none surfaced</b></span>
         <span>Story work <b>+US$50K</b> over the first draft</span>
       </div>
     </section>
 
     <section class="recs" aria-labelledby="recs-h">
-      <div class="recs-head"><h2 id="recs-h">Five recommendations</h2><span class="hint">Select a box for details</span></div>
+      <div class="recs-head"><h2 id="recs-h">Six recommendations</h2><span class="hint">Select a box for details</span></div>
       ${RECS.map((r, i) => html`<button class="card" type="button" key=${r.title} aria-haspopup="dialog" onClick=${e => openAt(i, e.currentTarget)}>
         <span class="num" aria-hidden="true">${i + 1}</span>
         <span class="body"><span class="ctitle">${r.title}</span>${r.card}</span>
