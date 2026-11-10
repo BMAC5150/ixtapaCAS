@@ -123,12 +123,30 @@ const SEATS = { can: [3666,4983,5295,4896,5202,3816], usa: [5100,8302,10884,8707
 const OCC = { 2024: [65.72,64.39,67.14,60.8,58.72,60.74,67.47,58.09,44.83,46.88,61.29,71.21], 2025: [68.91,65.07,60.95,66.15,65.27,55.46,64.61,63.13,44.15,51.86,64.11,69.05], 2026: [68.49,66.15,54.73,57.14,58.14,48.08,57.63,61.6] };
 const FX = { 2024: [13553,10639,12015,6497,4917,14254,7111,5277,4131,4349,9216,9714], 2025: [15313,7374,10724,6584,10023,4802,11112,3744,2936,17883,10376,10839], 2026: [10348,8748,11180,8291,3885,5632,5797,15792] };
 const RS = { 2024: [92800,78370,105431,101311,118643,91387,138575,126451,92009,102019,137653,206970], 2025: [123632,113562,99735,106915,106372,115164,135067,135227,87199,115432,135238,150292], 2026: [111803,109914,121765,109476,131653,107630,160193,138155] };
-// Estimated annual arrivals: half of OMA terminal passengers (both directions), 2014-2025.
-const ANNUAL = [[2014,254032],[2015,281050],[2016,278694],[2017,298951],[2018,283248],[2019,312593],[2020,158698],[2021,217088],[2022,296677],[2023,327196],[2024,337330],[2025,366808]];
+// OMA annual terminal passengers (both directions) and flight operations, 2009-2025, from the CVB's statistical data (9 Nov 2026).
+// Arrivals are estimated as half of passengers. Operations include general aviation; the 2018 figure (7,968) is inconsistent with that year's passengers and is not plotted.
+const PAX = [[2009,545051],[2010,496523],[2011,480613],[2012,457906],[2013,459799],[2014,508065],[2015,562099],[2016,557389],[2017,597902],[2018,555617],[2019,625179],[2020,317399],[2021,434195],[2022,592251],[2023,654153],[2024,674817],[2025,733612]];
+const OPS = { 2009: 13899, 2010: 12616, 2011: 12385, 2012: 11538, 2013: 10788, 2014: 11747, 2015: 11685, 2016: 11584, 2017: 12343, 2018: null, 2019: 12831, 2020: 9581, 2021: 10626, 2022: 11174, 2023: 10368, 2024: 10693, 2025: 10495 };
+const ANNUAL = PAX.map(([yr, p]) => [yr, Math.round(p / 2)]);
+// Hotel association, via the CVB: hotel nights by origin, Jan-Nov 2025 (member hotels only).
+const ORIGIN = [
+  { m: "Michoacán and the Bajío", share: "70% of Mexican nights", air: "Morelia (seasonal, to 18 Feb); Querétaro", read: "Mostly by road: Morelia is 3.5–4 hours away (travel guide)" },
+  { m: "Mexico City and Estado de México", share: "18% of Mexican nights", air: "Mexico City, the largest route", read: "The main air-led domestic market" },
+  { m: "Jalisco and Nuevo León", share: "3.8% of Mexican nights", air: "Guadalajara; Monterrey", read: "Service exists, demand is small" },
+  { m: "California", share: "38% of U.S. nights", air: "Los Angeles 6/wk; San Francisco 1/wk from 21 Nov", read: "The best-served U.S. market" },
+  { m: "Minnesota, Illinois, Wisconsin", share: "21% of U.S. nights", air: "Minneapolis 2/wk from 20 Dec; Chicago 1/wk from 19 Dec", read: "Snowbird markets, served in deep winter only" },
+  { m: "Texas", share: "6% of U.S. nights", air: "Dallas 6/wk; Houston 4/wk", read: "Service outruns local demand; likely connecting hubs (hypothesis)" },
+  { m: "Washington and Oregon", share: "8% of U.S. nights", air: "None", read: "Gap: guests connect" },
+  { m: "Arizona", share: "Not in the top ten", air: "Phoenix 2/wk", read: "Likely a connecting hub (hypothesis)" },
+  { m: "British Columbia and Alberta", share: "66% of Canadian nights", air: "Vancouver 2/wk; Calgary 4/wk", read: "The core Canadian markets, both served" },
+  { m: "Toronto and Quebec", share: "20% of Canadian nights", air: "Toronto dropped; Montreal 1/wk from 18 Dec", read: "Toronto now connects" },
+  { m: "Saskatchewan and Manitoba", share: "11% of Canadian nights", air: "None", read: "Likely connect via Calgary (hypothesis)" },
+  { m: "Latin America and Europe", share: "0.2% of all nights", air: "None", read: "No base for association business yet" },
+];
 
 const prevWinter = d => [d[2025][10], d[2025][11], d[2026][0], d[2026][1], d[2026][2], d[2026][3]];
 
-const TAGS = { Verified: "var(--ok)", Derived: "var(--accent)", Directory: "var(--warn)", Hypothesis: "var(--crit)" };
+const TAGS = { Verified: "var(--ok)", Reported: "var(--grey2)", Derived: "var(--accent)", Directory: "var(--warn)", Hypothesis: "var(--crit)" };
 function Tag({ t }) { return html`<span class="tag" style=${{ color: TAGS[t] }}><i style=${{ background: TAGS[t] }}></i>${t}</span>`; }
 
 function Panel({ eyebrow, title, tags, src, children, read, extra }) {
@@ -144,24 +162,42 @@ function Panel({ eyebrow, title, tags, src, children, read, extra }) {
   </section>`;
 }
 
-/* ---------- chart: annual arrivals (estimated) ---------- */
+/* ---------- chart: annual arrivals (estimated, bars) and flight operations (line, right axis) ---------- */
 function AnnualChart() {
-  const W = 760, H = 280, L = 56, R = 16, T = 24, B = 40, max = 400000;
+  const W = 760, H = 290, L = 56, R = 52, T = 24, B = 40, max = 400000, maxO = 16000;
   const bw = (W - L - R) / ANNUAL.length;
   const y = v => T + (H - T - B) * (1 - v / max);
+  const yo = v => T + (H - T - B) * (1 - v / maxO);
+  const cx = i => L + i * bw + bw / 2;
   const ref = 345451;
-  return html`<div class="chart"><svg viewBox=${`0 0 ${W} ${H}`} role="img" aria-label="Estimated arrivals by year, 2014 to 2025">
-    ${[0, 100000, 200000, 300000, 400000].map(v => html`<g key=${v}>
+  const seg = (a, b) => ANNUAL.slice(a, b).map(([yr], k) => `${cx(a + k)},${yo(OPS[yr])}`).join(" ");
+  const i17 = ANNUAL.findIndex(([yr]) => yr === 2017), i19 = ANNUAL.findIndex(([yr]) => yr === 2019);
+  return html`<div class="chart"><svg viewBox=${`0 0 ${W} ${H}`} role="img" aria-label="Estimated arrivals and flight operations by year, 2009 to 2025">
+    ${[0, 100000, 200000, 300000, 400000].map((v, k) => html`<g key=${v}>
       <line x1=${L} x2=${W - R} y1=${y(v)} y2=${y(v)} stroke="var(--line)" />
-      <text x=${L - 8} y=${y(v) + 4} text-anchor="end" font-size="11" fill="var(--muted)">${v / 1000}k</text></g>`)}
+      <text x=${L - 8} y=${y(v) + 4} text-anchor="end" font-size="11" fill="var(--muted)">${v / 1000}k</text>
+      <text x=${W - R + 8} y=${y(v) + 4} font-size="11" fill="var(--warn)">${k * 4}k</text></g>`)}
     <line x1=${L} x2=${W - R} y1=${y(ref)} y2=${y(ref)} stroke="var(--ink)" stroke-dasharray="4 4" opacity="0.6" />
-    <text x=${L + 6} y=${y(ref) - 6} font-size="11" fill="var(--muted)">2000 level: about 345k</text>
+    <text x=${L + 6} y=${y(ref) - 6} font-size="11" fill="var(--muted)">2000 level: about 345k arrivals</text>
     ${ANNUAL.map(([yr, v], i) => html`<g key=${yr}>
-      <rect x=${L + i * bw + bw * 0.18} y=${y(v)} width=${bw * 0.64} height=${y(0) - y(v)} rx="2" fill=${yr === 2025 ? "var(--accent)" : "var(--grey)"}><title>${yr}: about ${fmt(v)} arrivals</title></rect>
-      <text x=${L + i * bw + bw / 2} y=${H - B + 18} text-anchor="middle" font-size="11" fill="var(--muted)">${yr === 2014 ? "2014" : "'" + String(yr).slice(2)}</text>
-      ${(yr === 2025 || yr === 2020 || yr === 2019) && html`<text x=${L + i * bw + bw / 2} y=${y(v) - 6} text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">${Math.round(v / 1000)}k</text>`}
+      <rect x=${L + i * bw + bw * 0.18} y=${y(v)} width=${bw * 0.64} height=${y(0) - y(v)} rx="2" fill=${yr === 2025 ? "var(--accent)" : "var(--grey)"}><title>${yr}: about ${fmt(v)} arrivals; ${OPS[yr] ? fmt(OPS[yr]) + " flight operations" : "operations figure not reliable"}</title></rect>
+      <text x=${cx(i)} y=${H - B + 18} text-anchor="middle" font-size="11" fill="var(--muted)">${yr === 2009 ? "2009" : "'" + String(yr).slice(2)}</text>
+      ${(yr === 2025 || yr === 2020 || yr === 2019) && html`<text x=${cx(i)} y=${y(v) - 6} text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">${Math.round(v / 1000)}k</text>`}
     </g>`)}
+    <polyline points=${seg(0, i17 + 1)} fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linejoin="round" pointer-events="none" />
+    <line x1=${cx(i17)} y1=${yo(OPS[2017])} x2=${cx(i19)} y2=${yo(OPS[2019])} stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="3 3" pointer-events="none" />
+    <polyline points=${seg(i19, ANNUAL.length)} fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linejoin="round" pointer-events="none" />
+    ${ANNUAL.map(([yr], i) => OPS[yr] && html`<circle key=${yr} cx=${cx(i)} cy=${yo(OPS[yr])} r="3" fill="var(--surface)" stroke="var(--warn)" stroke-width="2" pointer-events="none" />`)}
+    <text x=${W - 10} y=${T + (H - T - B) / 2} font-size="11" fill="var(--warn)" transform=${`rotate(90 ${W - 10} ${T + (H - T - B) / 2})`} text-anchor="middle">Flight operations</text>
   </svg></div>`;
+}
+
+/* ---------- table: where hotel guests come from vs where flights come from ---------- */
+function OriginTable() {
+  return html`<div class="tbl"><table>
+    <thead><tr><th>Origin</th><th>Share of hotel nights, Jan–Nov 2025</th><th>Nonstop service this winter</th><th>Read</th></tr></thead>
+    <tbody>${ORIGIN.map(r => html`<tr key=${r.m}><td><b>${r.m}</b></td><td>${r.share}</td><td>${r.air}</td><td>${r.read}</td></tr>`)}</tbody>
+  </table></div>`;
 }
 
 /* ---------- small multiple line chart ---------- */
@@ -321,10 +357,10 @@ function App() {
 
   return html`<main class="wrap">
     <header>
-      <div class="eyebrow">Pre-CAS review · Block 1 · Participant access · Version 4</div>
+      <div class="eyebrow">Pre-CAS review · Block 1 · Participant access · Version 5</div>
       <h1>Ixtapa-Zihuatanejo Air Access Analysis</h1>
-      <div class="meta"><span>Zihuatanejo International Airport (ZIH)</span><span>Updated 5 Nov 2026 for BMAC, PCMA advisor</span></div>
-      <p class="lede">Arrivals are growing, and the growth is domestic. Canadian arrivals are up about 25% a year; U.S. arrivals are down about 10%. Winter international seats barely cover last winter's demand, so peak-season groups will need a seat block or a charter.</p>
+      <div class="meta"><span>Zihuatanejo International Airport (ZIH)</span><span>Updated 10 Nov 2026 for BMAC, PCMA advisor</span></div>
+      <p class="lede">Arrivals are growing, and the growth is domestic. Canadian arrivals are up about 25% a year; U.S. arrivals are down about 10%. Winter international seats fall short of last winter's demand, so peak-season groups will need a seat block or a charter. Most domestic visitors drive in, so domestic groups can arrive by coach.</p>
     </header>
 
     <aside class="callout" aria-label="Analysis Data DNA">
@@ -333,10 +369,11 @@ function App() {
         <dt>Air arrivals</dt><dd>AFAC (Mexico's civil aviation agency). Monthly commercial arrivals, Jan 2024 to Sep 2026, by country of flight origin.</dd><dd><${Tag} t="Verified" /></dd>
         <dt>Airline seats</dt><dd>OAG. Scheduled seats into ZIH, Nov 2026 to Apr 2027, as filed on 1 Nov 2026.</dd><dd><${Tag} t="Verified" /></dd>
         <dt>Hotels</dt><dd>Datatur (federal tourism ministry). Monthly hotel guests and occupancy, Jan 2024 to Aug 2026.</dd><dd><${Tag} t="Verified" /></dd>
-        <dt>Long-run trend</dt><dd>OMA (airport operator). Annual passengers 2014–2025, halved to estimate arrivals.</dd><dd><${Tag} t="Derived" /></dd>
+        <dt>Long-run trend</dt><dd>OMA (airport operator), via the CVB's statistical data. Annual passengers and flight operations, 2009–2025; passengers halved to estimate arrivals.</dd><dd><${Tag} t="Derived" /></dd>
+        <dt>Guest origin</dt><dd>Ixtapa-Zihuatanejo Hotel Association, via the CVB. Hotel nights by country, state and province, Jan–Nov 2025; member hotels only.</dd><dd><${Tag} t="Reported" /></dd>
         <dt>Gateways</dt><dd>Route directories and press, October 2026. Not confirmed with airlines.</dd><dd><${Tag} t="Directory" /></dd>
       </dl>
-      <p>AFAC, OAG and Datatur figures come from the destination's data file of 3 Nov 2026. "International" means flights from Canada or the U.S.; a foreign traveller connecting through Mexico City counts as domestic.</p>
+      <p>AFAC, OAG and Datatur figures come from the destination's data file of 3 Nov 2026, which is canonical where sources conflict. "International" means flights from Canada or the U.S.; a foreign traveller connecting through Mexico City counts as domestic.</p>
     </aside>
 
     <section class="kpis" aria-label="Key figures">
@@ -346,9 +383,10 @@ function App() {
       <div class="kpi"><span class="v">${fmt(intlSeats)}</span><span class="l">international seats for Nov–Apr, against ${fmt(prevIntl)} arrivals last winter</span><span class="s" style=${{ color: TAGS.Verified }}>Verified · OAG</span></div>
     </section>
 
-    <${Panel} eyebrow="Long-run trend" title="Arrivals are above their 2019 and 2000 levels" tags=${["Derived", "Directory"]}
-      read="About 367,000 arrivals in 2025: 17% above 2019 and 6% above 2000. Arrivals were flat for two decades; growth since 2024 has come from domestic traffic."
-      src="Half of OMA annual passengers (2014–2023 via Wikipedia; 2024–2025 from OMA). AFAC's commercial-only count for 2025 is 349,874.">
+    <${Panel} eyebrow="Long-run trend" title="Record arrivals on fewer flights" tags=${["Verified", "Derived"]}
+      extra=${html`<div class="legend"><span><i style=${{ background: "var(--grey)" }}></i>Estimated arrivals (left axis)</span><span><i class="ln" style=${{ background: "var(--warn)", height: "3px" }}></i>Flight operations (right axis)</span></div>`}
+      read="About 367,000 arrivals in 2025: 17% above 2019 and 6% above 2000. Flight operations fell 18% over the same period, from 12,831 to 10,495, so passengers per operation rose from about 49 to 70. Fewer, fuller flights mean fewer arrival waves and harder seat blocks for groups."
+      src="OMA annual passengers and flight operations, 2009–2025, via the CVB's statistical data (9 Nov 2026); passengers halved to estimate arrivals. Operations include general aviation. The 2018 operations figure (7,968) is inconsistent with that year's passengers, so it is bridged with a dashed line. AFAC's commercial-only count for 2025 is 349,874 arrivals.">
       <${AnnualChart} />
     <//>
 
@@ -416,21 +454,28 @@ function App() {
       <${GatewayTable} />
     <//>
 
+    <${Panel} eyebrow="Guest origin against air service" title="Where hotel guests come from, and whether a flight does" tags=${["Reported", "Directory", "Hypothesis"]}
+      read="Domestic demand is a drive market: Michoacán and the Bajío supply 70% of Mexican hotel nights, and domestic air arrivals equal only about 18% of Mexican hotel guests (260,683 against 1,423,835 in 2025). International demand clusters where flights already are, in California and western Canada. Texas and Arizona have more service than local demand, and Washington, Oregon and Saskatchewan have demand but no nonstop."
+      src="Hotel nights: Ixtapa-Zihuatanejo Hotel Association via the CVB, Jan–Nov 2025, member hotels only, so use the shares, not the totals. Domestic air arrivals: AFAC; Mexican hotel guests: Datatur (3 Nov file). Weekly flights: route directories, not confirmed with airlines.">
+      <${OriginTable} />
+    <//>
+
     <section aria-label="Implications" style=${{ display: "grid", gap: "14px" }}>
-      <div><div class="eyebrow">What it means</div><h2>Six implications for business events</h2></div>
+      <div><div class="eyebrow">What it means</div><h2>Seven implications for business events</h2></div>
       <div class="impl">
-        <div><h3>"International" means Canada first</h3><p>Canadian arrivals are up about 25% a year, Calgary and Vancouver fly direct, and Canada's advisory exempts ZIH by air. Lead with Western Canadian incentive and corporate groups.</p></div>
-        <div><h3>Peak-season groups need a seat plan</h3><p>December to February seats are already matched by last winter's demand. Groups in those months need a seat block or a charter.</p></div>
+        <div><h3>"International" means Canada first</h3><p>Canadian arrivals are up about 25% a year, Calgary and Vancouver fly direct, and Canada's advisory exempts ZIH by air. British Columbia and Alberta supply two-thirds of Canadian hotel nights. Lead with Western Canadian incentive and corporate groups.</p></div>
+        <div><h3>Peak-season groups need a seat plan</h3><p>December to February international seats fall 8–14% short of last winter's arrivals. Groups in those months need a seat block or a charter.</p></div>
         <div><h3>Late March and April are the shoulder opening</h3><p>Seats run about 30% above last year's arrivals in March and 75% above in April, and hotel occupancy in both months was below average in 2026. November has no slack. Test this with the airlines.</p></div>
-        <div><h3>Domestic air is the strength</h3><p>Domestic arrivals grew 19% in 2025 and 10% in 2026, with seats to spare. Air access supports events drawing from Mexico in every month.</p></div>
+        <div><h3>Domestic demand mostly drives in</h3><p>Domestic air arrivals grew 19% in 2025 and 10% in 2026, with seats to spare, yet they equal only about 18% of Mexican hotel guests. Michoacán and the Bajío, within driving distance, supply 70% of Mexican hotel nights. Domestic groups can come by coach in any month, so air is not their constraint.</p></div>
+        <div><h3>U.S. targeting follows California</h3><p>California supplies 38% of U.S. hotel nights and has the best service (Los Angeles 6 a week, San Francisco from 21 Nov). Texas supplies 6% despite 10 weekly flights from Dallas and Houston, which likely carry connecting passengers. U.S. arrivals are falling about 10% a year.</p></div>
         <div><h3>The low hotel months are domestic months</h3><p>June, September and October have the lowest occupancy and few international flights. Fill them with domestic meetings and keep international groups in winter.</p></div>
-        <div><h3>Global associations are out for now</h3><p>Delegates from Europe, Latin America and Asia need two flights, the last on a narrow-body. The U.S. market is shrinking, and Canada flies only in winter.</p></div>
+        <div style=${{ gridColumn: "1 / -1" }}><h3>Global associations are out for now</h3><p>Delegates from Europe, Latin America and Asia need two flights, the last on a narrow-body, and Latin America and Europe together supply 0.2% of hotel nights. The U.S. market is shrinking, and Canada flies only in winter.</p></div>
       </div>
     </section>
 
     <footer class="sources">
       <span><b>Method.</b> AFAC counts commercial arrivals; OMA counts all passengers in both directions, including charter and private flights. They differ on the size of the 2026 international decline (AFAC −2.7%, OMA −8.9%) but agree on the direction. 2025 data predates the war (late February 2026); most 2026 data follows it.</span>
-      <span>Sources: destination data file "Datos Zihuatanejo 2024–2026", 3 Nov 2026 (AFAC, OAG, Datatur); OMA traffic reports (<a href="https://news.oma.aero/assets/oma-december-2025-traffic-report-vf-pdf-293d7-f8d04.html?dl=1" target="_blank" rel="noopener">Dec 2025</a>, <a href="https://avisos.oma.aero/Reportes_Trafico/2026/9_Septiembre/OMA_Reporte_Trafico_Sep26_vf.pdf" target="_blank" rel="noopener">Sep 2026</a>); <a href="https://en.wikipedia.org/wiki/Ixtapa-Zihuatanejo_International_Airport" target="_blank" rel="noopener">Wikipedia airport page</a>; <a href="https://aviability.com/en/airport/zih-ixtapa-zihuatanejo/destinations" target="_blank" rel="noopener">aviability route directory</a>; <a href="https://www.blogto.com/travel/2026/10/air-canada-axes-flight-toronto-mexican-vacation/" target="_blank" rel="noopener">BlogTO on Air Canada</a>.</span>
+      <span>Sources: destination data file "Datos Zihuatanejo 2024–2026", 3 Nov 2026 (AFAC, OAG, Datatur; canonical); CVB "Ixtapa Zihuatanejo Statistical Data 2009–2025", 9 Nov 2026 (OMA passengers and operations; hotel-association guest origin); OMA traffic reports (<a href="https://news.oma.aero/assets/oma-december-2025-traffic-report-vf-pdf-293d7-f8d04.html?dl=1" target="_blank" rel="noopener">Dec 2025</a>, <a href="https://avisos.oma.aero/Reportes_Trafico/2026/9_Septiembre/OMA_Reporte_Trafico_Sep26_vf.pdf" target="_blank" rel="noopener">Sep 2026</a>); <a href="https://en.wikipedia.org/wiki/Ixtapa-Zihuatanejo_International_Airport" target="_blank" rel="noopener">Wikipedia airport page</a>; <a href="https://aviability.com/en/airport/zih-ixtapa-zihuatanejo/destinations" target="_blank" rel="noopener">aviability route directory</a>; <a href="https://www.blogto.com/travel/2026/10/air-canada-axes-flight-toronto-mexican-vacation/" target="_blank" rel="noopener">BlogTO on Air Canada</a>.</span>
       <span>Companion pages: <a href="https://claude.ai/artifact/Ju6eybTabVVEaepod1uqWf" target="_blank" rel="noopener">readiness summary</a> and <a href="https://claude.ai/artifact/USTUBemtFgziAvFYbgAHef" target="_blank" rel="noopener">Pre-CAS Review</a>.</span>
     </footer>
   </main>`;
