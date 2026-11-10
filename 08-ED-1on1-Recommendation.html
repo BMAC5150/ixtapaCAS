@@ -1,0 +1,414 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ixtapa-Zihuatanejo ED Recommendation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: private one-scroll card; thesis and spoken line, US$350K allocation bar, five ranked cards that open detail modals, private navigation and weak spot at the end */
+:root {
+  --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
+  --accent: #0d6a75; --accent-soft: #dcecee; --strike: #9aa9ae; --scrim: rgba(10, 24, 28, 0.55);
+  --caution: #8a5a12; --caution-soft: #f6ecdc;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+    --accent: #55bac6; --accent-soft: #17343a; --strike: #5d7177; --scrim: rgba(0, 0, 0, 0.7);
+    --caution: #e2b56a; --caution-soft: #2e2516;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+  --accent: #55bac6; --accent-soft: #17343a; --strike: #5d7177; --scrim: rgba(0, 0, 0, 0.7);
+  --caution: #e2b56a; --caution-soft: #2e2516;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 18px; line-height: 1.45; }
+body.locked { overflow: hidden; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 56px; display: grid; gap: 48px; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.05; }
+h1 { font-size: clamp(2.4rem, 6.5vw, 4.4rem); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 750; }
+h3 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 750; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+header { display: grid; gap: 18px; }
+.meta { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.thesis { font-family: var(--display); font-stretch: 85%; font-weight: 600; font-size: clamp(1.3rem, 3vw, 1.8rem); line-height: 1.2; color: var(--accent); max-width: 34ch; }
+.line { background: var(--surface); border: 2px solid var(--accent); border-radius: 16px; padding: 22px 26px; display: grid; gap: 8px; }
+.line q { font-size: clamp(1.15rem, 2.4vw, 1.4rem); font-weight: 600; quotes: "\201C" "\201D"; }
+
+/* allocation */
+.alloc { display: grid; gap: 16px; }
+.alloc-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.total { font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.total small { font-family: var(--mono); font-size: 0.8rem; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; margin-left: 10px; }
+.bar { display: flex; gap: 3px; height: 40px; border-radius: 10px; overflow: hidden; }
+.seg { background: var(--accent); min-width: 0; }
+.legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.legend li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; }
+.sw { width: 14px; height: 14px; border-radius: 3px; background: var(--accent); align-self: center; }
+.legend .nm { font-family: var(--display); font-stretch: 85%; font-weight: 700; font-size: 1.05rem; }
+.legend .amt { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.legend .ds { grid-column: 2 / 4; font-size: 0.92rem; color: var(--muted); }
+.legend li.new { border-color: var(--accent); background: var(--accent-soft); }
+.ctx { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 0.95rem; color: var(--muted); }
+.ctx b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* cards */
+.recs { display: grid; gap: 18px; }
+.recs-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.hint { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+.card { font: inherit; color: inherit; text-align: left; width: 100%; cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 24px; align-items: start; transition: border-color .15s; }
+.card:hover { border-color: var(--accent); }
+.card .num { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: 4.5rem; line-height: 0.85; color: var(--accent); }
+.card .body { display: grid; gap: 8px; min-width: 0; }
+.card .ctitle { font-family: var(--display); font-stretch: 85%; font-weight: 750; font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.05; text-wrap: balance; }
+.card .ask { font-size: 1.12rem; }
+.card .why { font-size: 1rem; color: var(--muted); }
+.card .why b { color: var(--ink); font-weight: 600; }
+.card .open { align-self: center; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+.card:hover .open { background: var(--accent-soft); }
+.swap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 4px; }
+.swap .old { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--strike); text-decoration-thickness: 2px; }
+.swap .arrow { color: var(--accent); font-weight: 700; }
+.swap .new { background: var(--accent-soft); border: 1.5px solid var(--accent); border-radius: 8px; padding: 6px 12px; font-weight: 600; }
+
+/* private */
+.private { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.pbox { border-radius: 16px; padding: 24px 26px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.pbox.nav-p { background: var(--caution-soft); border: 1.5px dashed var(--caution); }
+.pbox.nav-p .eyebrow { color: var(--caution); }
+.pbox.weak { background: var(--surface); border: 1px solid var(--line); }
+.pbox ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 8px; font-size: 1rem; }
+footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+
+/* modal */
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 50; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.modal { background: var(--surface); color: var(--ink); border-radius: 18px; border: 1px solid var(--line); width: min(860px, 100%); max-height: 100%; overflow-y: auto; display: grid; gap: 22px; padding: 30px; box-shadow: 0 24px 60px rgba(0,0,0,0.25); }
+.m-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: start; }
+.m-head .num { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: 3.6rem; line-height: 0.85; color: var(--accent); }
+.m-head .sub { color: var(--muted); font-size: 1rem; margin-top: 6px; }
+.close { font: inherit; font-size: 1.5rem; line-height: 1; width: 44px; height: 44px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+.close:hover { border-color: var(--accent); color: var(--accent); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.fact { border-top: 2px solid var(--ink); padding-top: 10px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.fact .k, .block .k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fact p { font-size: 1rem; }
+.block { display: grid; gap: 10px; }
+.quote { background: var(--bg); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; font-size: 1rem; }
+.quote .k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.topics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.topic { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; grid-template-columns: 2.1rem minmax(0, 1fr); gap: 2px 10px; background: var(--bg); align-content: start; }
+.topic .n { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); grid-row: span 2; padding-top: 3px; }
+.topic .t { font-family: var(--display); font-stretch: 85%; font-weight: 700; font-size: 1.08rem; }
+.topic .d { font-size: 0.95rem; }
+.note { font-size: 0.95rem; color: var(--muted); }
+.steps-list { margin: 0; padding-left: 1.3rem; display: grid; gap: 6px; font-size: 1rem; }
+.steps-list li::marker { color: var(--accent); font-family: var(--mono); }
+.fit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.fit > div { border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; }
+.fit .yes { background: var(--accent-soft); border: 1.5px solid var(--accent); }
+.fit .no { background: var(--bg); border: 1px solid var(--line); }
+.fit .no li { color: var(--muted); }
+.m-foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
+.nav { display: flex; gap: 8px; }
+.nav button { font: inherit; font-size: 0.92rem; font-weight: 600; color: var(--accent); background: none; border: 1.5px solid var(--accent); border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+.nav button:hover { background: var(--accent-soft); }
+.nav button:disabled { opacity: 0.35; cursor: default; background: none; }
+.m-foot .pos { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+
+@media (max-width: 820px) {
+  .legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facts, .topics, .fit, .private { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .legend { grid-template-columns: 1fr; }
+  .card { padding: 20px; gap: 10px 16px; grid-template-columns: auto minmax(0, 1fr); }
+  .card .num { font-size: 3.2rem; }
+  .card .open { grid-column: 2; justify-self: start; }
+  .modal { padding: 20px; }
+  .m-head .num { font-size: 2.6rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .modal { animation: rise .18s ease-out; }
+  @keyframes rise { from { transform: translateY(10px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+}
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const { useState, useEffect, useRef } = React;
+const html = htm.bind(React.createElement);
+
+const ALLOC = [
+  { nm: "Named owner", amt: 105, ds: "Senior bilingual group-sales lead plus a coordinator (US$90–120K)", op: 1 },
+  { nm: "Site visits", amt: 75, ds: "Fam trips and hosted inspections: the real conversion tool", op: 0.82 },
+  { nm: "The story", amt: 50, ds: "Planner research, positioning, planner assets", op: 0.66, isNew: true },
+  { nm: "Sales", amt: 50, ds: "A Bajío and Michoacán corporate sales mission, and one western Canada incentive mission (Vancouver, Calgary)", op: 0.52 },
+  { nm: "Data", amt: 40, ds: "CRM, lead / RFP / lost-business log, 60-day group baseline", op: 0.4 },
+  { nm: "Safety proof", amt: 30, ds: "Planner-grade safety and logistics pack for meetings buyers", op: 0.28 },
+];
+const TOTAL = ALLOC.reduce((s, a) => s + a.amt, 0);
+
+function Facts({ items }) {
+  return html`<div class="facts">${items.map(([k, v]) => html`<div class="fact" key=${k}><span class="k">${k}</span><p>${v}</p></div>`)}</div>`;
+}
+
+const PILLARS = [
+  ["Two experiences, one transfer", "A planned resort for the work, a real fishing town for the reward. Two moods without a second destination. Verify the drive time before claiming it."],
+  ["Not overbuilt", "A 150-person group is noticed here, not lost. Restaurants and boats can be bought out; the town feels like it belongs to the group."],
+  ["Authentic, not staged", "Zihuatanejo is a working Pueblo Mágico, not a hotel strip. Real-Mexico experiences boards and incentive winners can't easily get elsewhere."],
+  ["Ease, once proven", "Short transfers and a compact footprint, claimed only after the arrival experience is documented. Observe it on 17 Nov."],
+];
+
+const TESTS = [
+  "Names a benefit to the planner or group, not the tourist",
+  "Can be proven: case study, testimonial or data",
+  "Survives a compliance or board-approval read",
+  "Turns the two-place footprint into simplicity, not transfers",
+  "Works in Spanish first, then English",
+  "Differentiates against named competitors",
+  "Flexes by segment: Mexican corporate, Canadian incentive, boards",
+];
+
+const RECS = [
+  {
+    title: "Fund a sales cell from publicity",
+    sub: "Reallocate, don't add",
+    card: html`<p class="ask">Move US$350K, about 11% of the budget, from communications into a business-events cell for 24 months.</p>
+      <p class="why"><b>Why:</b> meetings are won with people, data and site visits. The publicity dollar given up is likely the lowest-return dollar.</p>`,
+    detail: html`
+      <${Facts} items=${[
+        ["The ask", "US$350K a year from the existing communications line, committed for 24 months, held as a separate business-events line."],
+        ["Why it fits", "About US$3.1M budget, 99.3% classed communications and publicity, no meetings line (inferred from the 29 Oct call; confirm). US$350K sits in the low half of the US$0.3–0.7M estimate."],
+        ["How it grows", "Earn the way to the high end on evidence at the 12-month review. No new money until room nights show up."],
+      ]} />
+      <div class="quote"><span class="k">Hypothesis</span><p>Budget figure and allocation are illustrative until the bureau shares its actual budget split and headcount.</p></div>`,
+  },
+  {
+    title: "Build the story from proof",
+    sub: "Why Ixtapa-Zihuatanejo, for a planner",
+    card: html`<p class="ask">Add US$50K to find and prove what makes the destination remarkable for groups.</p>
+      <p class="why"><b>Why:</b> planners don't buy paradise; every Pacific destination sells that. They buy what their group will feel, plus proof it runs smoothly.</p>`,
+    detail: html`
+      <div class="block">
+        <span class="k">Candidate pillars · Hypothesis, test with planners</span>
+        <ol class="topics">${PILLARS.map(([t, d], i) => html`<li class="topic" key=${t}><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${t}</span><span class="d">${d}</span></li>`)}</ol>
+      </div>
+      <${Facts} items=${[
+        ["Research · ~US$15K", "Interview 10–15 planners who booked or declined. Each one also yields a win or loss reason for the baseline."],
+        ["Positioning · ~US$15K", "One proposition per target segment, from a business-events specialist, not a brand agency."],
+        ["Assets · ~US$20K", "Bilingual planner kit, two or three case studies, photography of the meeting product. Reuse leisure creative for beaches."],
+      ]} />
+      <div class="quote"><span class="k">Guardrail</span><p>The story must not dodge safety or air access. A compelling story that skips the planner's first two questions loses credibility in the first email.</p></div>
+      <div class="quote"><span class="k">Use the summit</span><p>Thursday session 1 turns the Pueblo Mágico into meeting products. The advisors are a free focus group; fund the stories that survive their questions.</p></div>`,
+  },
+  {
+    title: "Layer a planner promise under the brand",
+    sub: "Review of the consumer line for business events",
+    card: html`<div class="swap">
+        <span class="old">One trip. Two paradises.</span>
+        <span class="arrow" aria-hidden="true">→</span>
+        <span class="new">Keep as umbrella + a business-events promise beneath it</span>
+      </div>
+      <p class="why"><b>Why:</b> the line sells scenery to tourists. Planners need a benefit they can defend to a CFO.</p>`,
+    detail: html`
+      <div class="block">
+        <span class="k">Why the line fails for business events</span>
+        <ol class="steps-list">
+          <li><b>Commodity claim.</b> Puerto Vallarta, Los Cabos, Huatulco and Cancún all sell paradise.</li>
+          <li><b>Compliance and optics flag.</b> “Paradise” signals vacation to boards, members, public-sector and medical buyers. Ethical MedTech already screens out resort venues for covered events.</li>
+          <li><b>“Two” sounds like logistics.</b> A planner hears two locations, extra transfers, a split group.</li>
+          <li><b>Scenery, not outcome.</b> No promise of attendance, engagement, reward value or smooth delivery.</li>
+          <li><b>Credibility gap.</b> “Paradise” beside a Guerrero advisory invites cynicism from risk-averse buyers.</li>
+          <li><b>Language unverified.</b> Check the Spanish original; Mexican buyers are the core market.</li>
+        </ol>
+      </div>
+      <div class="block">
+        <span class="k">Seven-point test for any planner proposition</span>
+        <ol class="topics">${TESTS.map((t, i) => html`<li class="topic" key=${t}><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="d">${t}</span></li>`)}</ol>
+      </div>
+      <div class="quote"><span class="k">The line</span><p>“‘One trip. Two paradises.’ is a strong umbrella for travellers. For planners, I'd build a business-events promise underneath it that names what their group gets and that we can prove.”</p></div>
+      <div class="quote"><span class="k">Where to raise it</span><p>Thursday session 1, as a question to the advisors: “How would you explain this line to your CFO?” Let the room reach the conclusion.</p></div>`,
+  },
+  {
+    title: "Sell where you can win now",
+    sub: "Segment focus for the first 24 months",
+    card: html`<p class="ask">Mexican corporate and incentive groups of 100–300 midweek, drawn first from Michoacán and the Bajío; western Canadian incentives in winter; boards and retreats.</p>
+      <p class="why"><b>Why:</b> 93% of hotel guests are already Mexican, and most drive in. Domestic wins are the credential for international ones; air and safety rule out the rest for now.</p>`,
+    detail: html`
+      <div class="fit">
+        <div class="yes"><span class="eyebrow">Yes</span><ul class="steps-list">
+          <li>Mexican corporate and incentive, 100–300, midweek, in the low months (June, September, October); Michoacán and the Bajío first, by coach</li>
+          <li>Canadian incentives, Dec–Mar, via Vancouver and Calgary; British Columbia and Alberta supply two-thirds of Canadian hotel nights</li>
+          <li>Boards and executive retreats in the luxury tier</li>
+          <li>Domestic association congresses already being won</li>
+        </ul></div>
+        <div class="no"><span class="eyebrow">Not yet</span><ul class="steps-list">
+          <li>International-majority associations; Latin America and Europe supply 0.2% of hotel nights</li>
+          <li>U.S. corporate groups at scale; U.S. arrivals are falling about 10% a year</li>
+          <li>Events above 800 delegates</li>
+          <li>Buyers who cannot clear a Guerrero travel-risk policy</li>
+        </ul></div>
+      </div>
+      <div class="quote"><span class="k">Evidence</span><p>The direction rests on the destination's 3 Nov data file (Datatur, AFAC, OAG) and the CVB's guest-origin data. Sizes stay a working view until the group history arrives.</p></div>`,
+  },
+  {
+    title: "Govern for evidence",
+    sub: "The bar, the authority, the partners",
+    card: html`<p class="ask">A two-year trust-committee authority, hotels and airport co-paying, and a cost-per-room-night bar at 12 months.</p>
+      <p class="why"><b>Why:</b> a sales cycle doesn't fit an annual budget, and hotels capture most delegate spend.</p>`,
+    detail: html`
+      <${Facts} items=${[
+        ["The bar", "US$350K ÷ about 7,000 incremental room nights ≈ US$50 per room night: roughly 16 groups of 150 for 3 nights, or 0.5–0.9% of sold room nights at 2025's 61.7% occupancy. Aim them at the low months. Hypothesis: replace with real ADR and incremental share once the group baseline exists."],
+        ["Authority", "Ask the trust committee for a two-year line, not one. State, municipal, hotel-association and developer seats all have to agree."],
+        ["Partners", "Ask the hotel association to match the investment. Pair air-route marketing with OMA, since it serves leisure too."],
+      ]} />
+      <div class="block">
+        <span class="k">12-month review</span>
+        <ol class="steps-list">
+          <li>Baseline built: leads, RFPs, definites, lost reasons</li>
+          <li>Room nights booked against the bar</li>
+          <li>Story pillars tested with planners: kept, revised, dropped</li>
+          <li>Decision: scale toward US$0.7M, hold, or redirect</li>
+        </ol>
+      </div>`,
+  },
+];
+
+function Modal({ index, onClose, onGo }) {
+  const r = RECS[index];
+  const closeRef = useRef(null);
+  const boxRef = useRef(null);
+  useEffect(() => {
+    document.body.classList.add("locked");
+    closeRef.current && closeRef.current.focus();
+    if (boxRef.current) boxRef.current.scrollTop = 0;
+    const onKey = e => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight" && index < RECS.length - 1) onGo(index + 1);
+      if (e.key === "ArrowLeft" && index > 0) onGo(index - 1);
+      if (e.key === "Tab" && boxRef.current) {
+        const f = boxRef.current.querySelectorAll("button:not([disabled])");
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("keydown", onKey); document.body.classList.remove("locked"); };
+  }, [index]);
+  return html`<div class="scrim" onClick=${e => { if (e.target === e.currentTarget) onClose(); }}>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" ref=${boxRef}>
+      <div class="m-head">
+        <span class="num" aria-hidden="true">${index + 1}</span>
+        <div><h3 id="m-title">${r.title}</h3><p class="sub">${r.sub}</p></div>
+        <button class="close" type="button" aria-label="Close details" ref=${closeRef} onClick=${onClose}>×</button>
+      </div>
+      ${r.detail}
+      <div class="m-foot">
+        <span class="pos">Recommendation ${index + 1} of ${RECS.length}</span>
+        <div class="nav">
+          <button type="button" disabled=${index === 0} onClick=${() => onGo(index - 1)}>← Previous</button>
+          <button type="button" disabled=${index === RECS.length - 1} onClick=${() => onGo(index + 1)}>Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function App() {
+  const [open, setOpen] = useState(null);
+  const lastCard = useRef(null);
+  const openAt = (i, el) => { lastCard.current = el; setOpen(i); };
+  const close = () => { setOpen(null); setTimeout(() => lastCard.current && lastCard.current.focus(), 0); };
+  return html`<main class="wrap">
+    <header>
+      <div class="eyebrow">Private · 1:1 with the CVB Executive Director</div>
+      <h1>Fund a Sales Cell, Not a Campaign</h1>
+      <p class="thesis">Take US$350K from publicity, fund a business-events cell for 24 months, and judge it on room nights, not impressions.</p>
+      <p class="meta">Personal recommendation card · Bruce MacMillan · Updated 10 Nov 2026 · Not for distribution</p>
+    </header>
+
+    <section class="line" aria-label="The line">
+      <span class="eyebrow">The line</span>
+      <q>You don't need a bigger campaign for meetings. You need one owner, one database, one story you can prove, and one honest year of results, and you can fund that from what you already spend.</q>
+    </section>
+
+    <section class="alloc" aria-labelledby="alloc-h">
+      <div class="alloc-head">
+        <h2 id="alloc-h">What the money buys</h2>
+        <span class="tag">Illustrative · Hypothesis</span>
+      </div>
+      <div class="total">US$${TOTAL}K<small>a year · 24 months</small></div>
+      <div class="bar" role="img" aria-label=${"Allocation: " + ALLOC.map(a => a.nm + " US$" + a.amt + "K").join(", ")}>
+        ${ALLOC.map(a => html`<div class="seg" key=${a.nm} style=${{ flex: a.amt, opacity: a.op }}></div>`)}
+      </div>
+      <ul class="legend">
+        ${ALLOC.map(a => html`<li key=${a.nm} class=${a.isNew ? "new" : ""}>
+          <span class="sw" style=${{ opacity: a.op }}></span><span class="nm">${a.nm}</span><span class="amt">US$${a.amt}K</span>
+          <span class="ds">${a.ds}</span>
+        </li>`)}
+      </ul>
+      <div class="ctx">
+        <span>Current budget <b>~US$3.1M</b> (inferred)</span>
+        <span>Share reallocated <b>~11%</b></span>
+        <span>Meetings line today <b>none</b></span>
+        <span>Story work <b>+US$50K</b> over the first draft</span>
+      </div>
+    </section>
+
+    <section class="recs" aria-labelledby="recs-h">
+      <div class="recs-head"><h2 id="recs-h">Five recommendations</h2><span class="hint">Select a box for details</span></div>
+      ${RECS.map((r, i) => html`<button class="card" type="button" key=${r.title} aria-haspopup="dialog" onClick=${e => openAt(i, e.currentTarget)}>
+        <span class="num" aria-hidden="true">${i + 1}</span>
+        <span class="body"><span class="ctitle">${r.title}</span>${r.card}</span>
+        <span class="open">Details</span>
+      </button>`)}
+    </section>
+
+    <section class="private" aria-label="Private notes">
+      <div class="pbox nav-p">
+        <span class="eyebrow">Private navigation · never said aloud</span>
+        <h2>Watch the politics</h2>
+        <ul>
+          <li>Insist the bureau owns lead distribution and runs it neutrally across hotels. Otherwise the largest venue becomes the de facto bureau, and smaller hotels stop co-funding.</li>
+          <li>“One trip. Two paradises.” is likely a settlement between Ixtapa and Zihuatanejo interests. Propose a layer beneath it, never a replacement.</li>
+        </ul>
+      </div>
+      <div class="pbox weak">
+        <span class="eyebrow">Weak spot in my own plan</span>
+        <h2>Someone loses a campaign</h2>
+        <ul>
+          <li>US$350K comes out of an existing line, and the trust committee has state, municipal, hotel and developer seats. Expect resistance.</li>
+          <li>Fallback: fund year one at about half and ask hotels to cover the rest. Protect the owner and the data first; story and sales scale later.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      <span>Built from the 1 Nov advisory conversation, the Discovery Preparation Summary and the Strategic Reality Check. Updated 10 Nov with the destination's 3 Nov data file (Datatur, AFAC, OAG; canonical) and the CVB's guest-origin data.</span>
+      <span>Budget, allocation, segment sizes and the cost-per-room-night bar are hypotheses until the destination shares its group data.</span>
+    </footer>
+    ${open !== null && html`<${Modal} index=${open} onClose=${close} onGo=${setOpen} />`}
+  </main>`;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(html`<${App} />`);
+</script>
+
+</body></html>
