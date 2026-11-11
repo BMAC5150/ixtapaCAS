@@ -388,6 +388,13 @@ function App() {
       <div class="card"><h3>Unsold room nights in the three lowest months</h3><div class="big">${fInt(M.lowUnsold)}</div><p>Lowest occupancy: <b>${BASE.lowNames.join(', ')}</b></p></div>
     </section>
 
+    <div class="panel" id="occupancy">
+      <h3>Hotel occupancy by month, 2024 to 2026</h3>
+      <div class="key"><span><i class="sw" style=${{ background: 'var(--c2)' }}></i>2024</span><span><i class="sw" style=${{ background: 'var(--c0)' }}></i>2025</span><span><i class="sw" style=${{ background: 'var(--c1)' }}></i>2026</span></div>
+      <${OccLines} />
+      <p class="note">2026 runs January to August. The 2026 data postdates late February 2026; 2024 and 2025 predate it.</p>
+    </div>
+
     <section id="geo">
       <div class="sec-head"><h2>Where the Room Nights Come From</h2><span class="tag">Reported · partial coverage</span></div>
       <p class="intro">Hotel-association guest origin, January to November 2025, applied to the year's room nights. Michoacán and the Bajío are the core market, within driving distance.</p>
@@ -414,12 +421,6 @@ function App() {
         <div class="key"><span><i class="sw" style=${{ background: 'var(--c0)' }}></i>Domestic</span><span><i class="sw" style=${{ background: 'var(--c1)' }}></i>International</span><span><i class="sw" style=${{ background: 'var(--cm)', opacity: 0.4 }}></i>Unsold</span></div>
         <${SeasonBars} months=${M.months} />
         <p class="note"><span class="flag">*</span> Unconfirmed: in a starred month Datatur counts more than five times as many foreign hotel guests as international air arrivals. October 2025 shows ${fInt(BASE.oct.fg)} foreign guests against ${fInt(BASE.oct.us)} U.S. and ${fInt(BASE.oct.ca)} Canadian arrivals, so its international bar should be confirmed with Datatur.</p>
-      </div>
-      <div class="panel">
-        <h3>Hotel occupancy by month, 2024 to 2026</h3>
-        <div class="key"><span><i class="sw" style=${{ background: 'var(--c2)' }}></i>2024</span><span><i class="sw" style=${{ background: 'var(--c0)' }}></i>2025</span><span><i class="sw" style=${{ background: 'var(--c1)' }}></i>2026</span></div>
-        <${OccLines} />
-        <p class="note">2026 runs January to August. The 2026 data postdates late February 2026; 2024 and 2025 predate it.</p>
       </div>
     </section>
 
