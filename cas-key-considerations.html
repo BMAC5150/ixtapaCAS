@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Key Considerations for the CAS: What the Industry Data Says</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one-scroll briefing; thesis, four numbered considerations (evidence tiles, what it means for the destination, the ED recommendation it supports, a line to say aloud), a mapping table, sources */
+:root {
+  --bg: #eef3f3; --surface: #ffffff; --ink: #11232a; --muted: #56686f; --line: #d3dfe1;
+  --accent: #0d6a75; --accent-soft: #dcecee; --caution: #8a5a12; --caution-soft: #f6ecdc;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d181c; --surface: #142328; --ink: #e5eef0; --muted: #9db1b7; --line: #263a40;
+    --accent: #55bac6; --accent-soft: #17343a; --caution: #e2b56a; --caution-soft: #2e2516;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 18px; line-height: 1.45; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px max(16px, env(safe-area-inset-left, 0px)) 56px; display: grid; gap: 44px; }
+.wrap > * { min-width: 0; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.05; }
+h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 750; }
+h3 { font-size: clamp(1.45rem, 3vw, 1.95rem); font-weight: 750; }
+p { margin: 0; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.tag { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+header { display: grid; gap: 18px; }
+.thesis { font-family: var(--display); font-stretch: 85%; font-weight: 600; font-size: clamp(1.25rem, 3vw, 1.75rem); line-height: 1.2; color: var(--accent); max-width: 38ch; }
+.meta { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.basis { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; font-size: 0.95rem; color: var(--muted); display: grid; gap: 6px; }
+.basis b { color: var(--ink); font-weight: 600; }
+
+.cons { display: grid; gap: 22px; }
+.con { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; gap: 20px; }
+.con-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 22px; align-items: start; }
+.con-head .num { font-family: var(--display); font-stretch: 75%; font-weight: 800; font-size: 4.4rem; line-height: 0.85; color: var(--accent); grid-row: span 2; }
+.con-head .claim { font-size: 1.12rem; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.stat { border-top: 2px solid var(--ink); padding-top: 10px; display: grid; gap: 4px; align-content: start; }
+.stat .v { font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: 2.3rem; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat .d { font-size: 0.95rem; }
+.stat .s { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; color: var(--muted); }
+.block { display: grid; gap: 8px; }
+.block .k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.block ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; font-size: 1rem; }
+.two { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 18px; }
+.supports { background: var(--accent-soft); border: 1.5px solid var(--accent); border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; }
+.supports .k { color: var(--accent); }
+.supports ol { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 6px; }
+.supports li { font-size: 0.98rem; }
+.supports li b { font-family: var(--display); font-stretch: 85%; font-weight: 750; }
+.line { background: var(--bg); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; }
+.line .k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.line q { font-size: 1.08rem; font-weight: 600; quotes: "\201C" "\201D"; }
+.caveat { font-size: 0.9rem; color: var(--caution); background: var(--caution-soft); border-radius: 8px; padding: 8px 12px; }
+
+.map { display: grid; gap: 14px; }
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.95rem; }
+th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 0.85rem; }
+tr:last-child td { border-bottom: 0; }
+td.n { font-family: var(--display); font-stretch: 80%; font-weight: 800; color: var(--accent); font-size: 1.3rem; }
+
+footer { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 8px; }
+footer ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 4px; }
+
+@media (max-width: 760px) {
+  .two { grid-template-columns: 1fr; }
+  .con { padding: 20px; }
+  .con-head .num { font-size: 3.2rem; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const html = htm.bind(React.createElement);
+
+// Recommendations in the 1:1 recommendation card for the CVB Executive Director (updated 10 Nov 2026)
+const ED = {
+  1: "Build your own data before anything else",
+  3: "Build the story from proof",
+  4: "Layer a planner promise under the brand",
+  5: "Sell where you can win now",
+  6: "Govern for evidence",
+  S: "Safety proof (budget line): a planner-grade safety and logistics pack",
+};
+
+const CONS = [
+  {
+    title: "Buyers manage risk by switching destinations",
+    claim: "Planners do not argue with risk; they route around it. Risk management is now a core part of destination selection, and most planners do not feel equipped to judge it.",
+    stats: [
+      ["39%", "of planners change destination or city in response to geopolitical instability, their top response", "AMEX GBT 2027 Forecast · Convene p. 27"],
+      ["31%", "name improving risk management and compliance as a 2027 priority, joint second", "AMEX GBT 2027 Forecast · Convene p. 27"],
+      ["25%", "of global travel buyers cite traveler safety, security and insurance among their biggest concerns", "GBTA survey · Convene p. 27"],
+      ["17%", "of corporate planners feel equipped to assess future risks; 55% have changed how they plan because of geopolitics", "PCMA 2026 Outlook Report · Convene pp. 26, 28"],
+    ],
+    means: [
+      "The U.S. State Department rates Guerrero Level 4, Do Not Travel, statewide, with no exception for Ixtapa or Zihuatanejo, and tells U.S. citizens to follow the same restrictions as government employees (advisory of 29 May 2026).",
+      "For U.S. buyers this is a policy gate, not a perception problem. Better messaging will not move it.",
+      "The markets the gate does not touch are where the near-term wins are: Mexico, about 91% of 2025 hotel room nights, and Canada, whose air arrivals grew 29% in 2025.",
+      "What wins those buyers is an easy risk decision: a planner-grade safety and logistics pack, with a named owner, that an approver or insurer would accept.",
+    ],
+    supports: ["5", "S"],
+    line: "Planners don't argue with risk, they route around it. Our job is to make Ixtapa-Zihuatanejo the easy yes for the buyers who can come.",
+  },
+  {
+    title: "Fewer, better events: a smaller pool that rewards proof",
+    claim: "Corporate budgets are shrinking, and the events that survive are fewer and more strategic. Each one has to justify itself internally, so destinations that supply evidence win them.",
+    stats: [
+      ["60%", "of corporate planners report budget reductions", "PCMA 2026 Outlook Report · Convene pp. 26–27"],
+      ["55%", "of corporate planners with reduced or frozen budgets now hold fewer but more strategic events; 19% hold more, smaller ones", "PCMA 2026 Outlook Report · Convene p. 26"],
+      ["69%", "of global travel buyers say rising travel costs most affect their decisions", "GBTA survey · Convene p. 27"],
+      ["35%", "of planners respond to rising costs by changing destination or city; 33% by holding smaller meetings", "AMEX GBT 2027 Forecast · Convene p. 27"],
+    ],
+    means: [
+      "Small, strategic programmes of 100 to 300 people are exactly the destination's realistic core, so the trend fits.",
+      "But a shrinking pool means fewer requests for proposals, and every planner must defend the choice. Group history, case studies and references decide it.",
+      "Ixtapa-Zihuatanejo has a strong leisure baseline but no group record a planner can check yet.",
+    ],
+    caveat: "These are mostly North American buyers: 92% of the Convene survey's respondents are in North America and 3% in Latin America (p. 15). Confirm what Mexican corporate buyers are doing before assuming the same pattern.",
+    supports: ["1", "6"],
+    line: "Every event that survives a budget cut has to justify itself. The destination that hands planners the evidence wins it.",
+  },
+  {
+    title: "Memorable experience is the top priority, and delivery is the proof",
+    claim: "Planners' first priority for 2027 is a more memorable attendee experience, and the industry is shifting from counting attendance to the quality of engagement.",
+    stats: [
+      ["42%", "of planners name improving attendee experience with more memorable events as their top 2027 priority", "AMEX GBT 2027 Forecast · Convene p. 27"],
+      ["31%", "also prioritize risk management and compliance: planners want memorable and safe together", "AMEX GBT 2027 Forecast · Convene p. 27"],
+    ],
+    means: [
+      "Zihuatanejo's offer matches the top priority: dine-arounds, restaurant and venue buyouts, gastronomy, nature and community programmes, and private sunset charters.",
+      "Planners will ask how it is delivered. Transfer time between the two places, venue capacities and permits are not yet documented, and venue capacities are self-reported.",
+      "The months with the most room, June, September and October, with about 306,000 unsold hotel room nights in 2025, are also the rain and hurricane months. Every outdoor experience needs an indoor backup.",
+    ],
+    supports: ["3", "4"],
+    line: "Memorable is what planners want most. Let's show we can deliver it in every season, not just promise it.",
+  },
+  {
+    title: "The data gap is industry-wide, so owned data is a chance to get ahead",
+    claim: "Most of the meetings industry measures little and uses AI for content rather than insight. A destination that builds even a simple record of its group business moves ahead of most competitors.",
+    stats: [
+      ["15%", "of meeting professionals report an increased focus on data and ROI-driven decision-making as a business-model change", "2026 Meetings Market Survey · Convene p. 19"],
+      ["3%", "use AI for market segmentation and 4% for attendee matching, although 80% use AI tools", "2026 Meetings Market Survey · Convene p. 18"],
+      ["15%", "of event professionals use AI strategically, although more than nine in ten use it in some way", "Amy Blackman, quoted in Convene p. 36"],
+      ["57%", "of PCMA Outlook respondents name data analytics as a top emerging skill, second only to strategic planning", "PCMA 2026 Outlook Report · Convene p. 27"],
+    ],
+    means: [
+      "Everything the destination has shared so far is third-party: Datatur, AFAC, OAG, the state and the hotel association. No bureau-owned record of leads, proposals, bookings or losses has surfaced.",
+      "That puts Ixtapa-Zihuatanejo behind the leaders, not behind the industry. A simple, consistent record would put it ahead of most destinations.",
+      "Hotel room nights are the common currency: every target, win and loss can be counted in what hotels sell.",
+    ],
+    supports: ["1"],
+    line: "Very few destinations measure their group business well. A simple record of every lead would put you ahead of most of them.",
+  },
+];
+
+function Supports({ ids }) {
+  return html`<div class="supports">
+    <span class="k eyebrow">Supports in the ED recommendation</span>
+    <ol>${ids.map((id) => html`<li key=${id}>${id === "S" ? html`<b>Budget line:</b> ${ED.S.replace("Safety proof (budget line): ", "Safety proof, ")}` : html`<b>Recommendation ${id}:</b> ${ED[id]}`}</li>`)}</ol>
+  </div>`;
+}
+
+function Consideration({ c, i }) {
+  return html`<article class="con" id=${"c" + (i + 1)} aria-labelledby=${"c" + (i + 1) + "-h"}>
+    <div class="con-head">
+      <span class="num" aria-hidden="true">${i + 1}</span>
+      <h3 id=${"c" + (i + 1) + "-h"}>${c.title}</h3>
+      <p class="claim">${c.claim}</p>
+    </div>
+    <div class="stats">${c.stats.map(([v, d, s]) => html`<div class="stat" key=${v + d}><span class="v">${v}</span><span class="d">${d}</span><span class="s">${s}</span></div>`)}</div>
+    ${c.caveat && html`<p class="caveat">${c.caveat}</p>`}
+    <div class="two">
+      <div class="block"><span class="k">What it means for Ixtapa-Zihuatanejo</span><ul>${c.means.map((m) => html`<li key=${m}>${m}</li>`)}</ul></div>
+      <${Supports} ids=${c.supports} />
+    </div>
+    <div class="line"><span class="k">The line</span><q>${c.line}</q></div>
+  </article>`;
+}
+
+function App() {
+  return html`<main class="wrap">
+    <header>
+      <div class="eyebrow">PCMA Customer Advisory Summit · Ixtapa-Zihuatanejo · 17–20 Nov 2026</div>
+      <h1>Key Considerations: What the Industry Data Says</h1>
+      <p class="thesis">Buyers are cutting budgets, switching destinations to manage risk and asking for proof. Four considerations for the summit, and the recommendations they support.</p>
+      <p class="meta">Prepared by Bruce MacMillan, PCMA advisor · 13 Nov 2026</p>
+      <div class="basis">
+        <span><b>Evidence base:</b> the November 2026 issue of PCMA Convene, including its 2026 Meetings Market Survey and the studies it reports: PCMA's 2026 Outlook Report, the American Express GBT Global 2027 Meetings and Events Forecast and a GBTA buyer survey. Destination figures come from the destination's 3 Nov 2026 data file (Datatur, AFAC, OAG) and the CVB's hotel-association data; the travel advisory comes from the U.S. State Department.</span>
+        <span>Industry respondents are mostly North American. Figures are as published; page numbers refer to the Convene issue.</span>
+      </div>
+    </header>
+
+    <section class="cons" aria-label="Four considerations">
+      ${CONS.map((c, i) => html`<${Consideration} key=${c.title} c=${c} i=${i} />`)}
+    </section>
+
+    <section class="map" aria-labelledby="map-h">
+      <div class="eyebrow">How the considerations support the ED recommendation</div>
+      <h2 id="map-h">From Industry Evidence to Action</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th scope="col">#</th><th scope="col">Consideration</th><th scope="col">ED recommendation it supports</th><th scope="col">What it asks of the destination</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1</td><td>Buyers manage risk by switching destinations</td><td>5. Sell where you can win now; safety proof budget line</td><td>Focus on Mexico and Canada; build a planner-grade safety and logistics pack with a named owner</td></tr>
+          <tr><td class="n">2</td><td>Fewer, better events reward proof</td><td>1. Build your own data; 6. Govern for evidence</td><td>Record every group lead and outcome; judge the programme on room nights</td></tr>
+          <tr><td class="n">3</td><td>Memorable experience is the top priority</td><td>3. Build the story from proof; 4. Layer a planner promise under the brand</td><td>Document transfer times, venue capacities and weather backup; promise only what can be shown</td></tr>
+          <tr><td class="n">4</td><td>The data gap is industry-wide</td><td>1. Build your own data before anything else</td><td>Start a simple bureau-owned record within 90 days and use room nights as the common currency</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <footer>
+      <span>Sources</span>
+      <ul>
+        <li>PCMA Convene, November 2026: 2026 Meetings Market Survey, pp. 14–19 (approximate margin of error 7%); Business Events Forecast, pp. 26–28; AI and skills feature, p. 36. <a href="https://www.pcma.org/">pcma.org</a></li>
+        <li>PCMA 2026 Outlook Report; American Express GBT Global 2027 Meetings and Events Forecast; GBTA business travel buyer survey: as reported in Convene, November 2026.</li>
+        <li>U.S. Department of State, Mexico Travel Advisory, issued 29 May 2026: <a href="https://travel.state.gov/en/international-travel/travel-advisories/mexico.html">travel.state.gov</a></li>
+        <li>Destination data file "20261103_Datos Zihuatanejo 2024-2026" (Datatur hotels, AFAC air arrivals, OAG seats) and CVB statistical data (hotel-association guest origin, Jan–Nov 2025). Room nights are modelled on Datatur's base of about 6,800 rooms: see <a href="visitor-profiles-room-nights.html">Visitor Profiles in Room Nights</a>.</li>
+      </ul>
+    </footer>
+  </main>`;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(html`<${App} />`);
+</script>
+</body>
+</html>
